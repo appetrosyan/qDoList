@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/FilePicker.qml</file>
+        <file>qml/DatePicker.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/TaskAdd.qml</file>
+        <file>qml/TaskEdit.qml</file>
+        <file>qml/TaskList.qml</file>
+        <file alias="fontello.ttf">Icons/fontello.ttf</file>
+        <file alias="qDo.svg">Icons/qDo.svg</file>
+        <file alias="qDo.png">Icons/qDo.png</file>
+        <file>qml/InfoRow.qml</file>
+    </qresource>
+    <qresource prefix="/Images">
+        <file>Icons/move.svg</file>
+    </qresource>
+</RCC>

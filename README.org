@@ -1,0 +1,79 @@
+#+TITLE: qDo a QML based todo-list manager. 
+* What this is
+
+A holiday project of a physicist, trying not to forget how to write C++. 
+
+It's a todo list manager. When it's in a finished (post-alpha) state, I expect it to be the same thing to Todoist, as KeepassX is to LastPass.
+
+ - [X] TODO tasks that can be toggled by swiping left to right. 
+ - [X] Tasks can be moved up and down.
+ - [X] Multiple todo lists can be, [5/5]
+   - [X] loaded
+   - [X] Saved
+   - [X] Automatically synced to disk
+   - [X] And re-loaded when a file changes on disk
+   - [X] Viewed from a nice sidebar that goes away for small windows.
+ - [-] Todo lists are stored in [1/7]
+   - [X] Plain text Json
+   - [ ] Binary Json
+   - [-] Org mode (ther's some rudimentary Org support, but there are far too many formats to keep track of)
+   - [-] Stripped out of C-like comments
+     - [X] They can be loaded,
+     - [ ] Tracked
+     - [ ] And synced back.
+   - [ ] Stripped out of shell-like comments [0/2]
+     - [ ] loading
+     - [ ] syncing
+   - [ ] Stripped out of Haskell Source code
+   - [ ] Todoist lists.
+ - [-] Has a command-driven interface. [5/6]
+   - [X] There's a command-line on the bottom
+   - [X] It can add normal level tasks.
+   - [-] It can parse natural language e.g.
+     - [X] "by tomorrow" or "next week"
+     - [ ] Also things like "monday" "tuesday" etc. 
+     - [X] You can also add a scheduled date,
+     - [X] if a date is specified in a plaintext form e.g. 3/20, it's first assumed to be month/day/year and only then the other way around. 
+     - [X] In English
+     - [-] In Russian (the translations are there but don't load)
+     - [ ] TODO get feature requests. 
+   - [X] Additional subtasks can be added by putting them inside curly braces and splitting with commas.
+   - [X] Same can be done by putting comma separated subtasks after a 
+   - [X] a "+" asks the manager to find the closest match from all open tasks.
+     - [X] if there's a unique match at the top level the task is marked. 
+ - [X] The recently opened files are saved persistently across sessions
+* TODO Install
+** From source
+Disclaimer, This is not recommended, and is not the way you should be installing the program in general. 
+
+I intend to create appropriate packages, but they're not ready at this stage. 
+
+#+begin_src bash 
+git clone https://github.com/appetrosyan/qDo.git
+#+end_src
+
+Next enter the qDoList directoty, and run 
+
+#+begin_src bash
+qmake && make 
+#+end_src
+
+** Mac OS X
+Which in turn should create the executable. Put it in `/bin` or `/usr/bin`, give it permissions and use to your heart's content. 
+* License. 
+
+This program is licensed as GPLv3. 
+
+This means that you can take it. You can modify it, but you need to let me know what changes you've made, and commit them upstream. 
+
+
+* Donating. 
+
+At this point, there's no reason to donate, however, if you decide that you want to help, here's a few options. 
+
+For Russian residents this might be easier.  
+
+[[Yandex.Wallet][https://money.yandex.ru/to/410016490055091]]
+
+Or PayPal: a-p-petrosyan@yandex.ru either works
+
