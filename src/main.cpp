@@ -16,14 +16,11 @@
 #include <QQuickStyle>
 #include <QLoggingCategory>
 
-#ifdef Q_OS_ANDROID
-#include "../3rdparty/kirigami/src/kirigamiplugin.h"
-#endif
 
 
 int main(int argc, char ** argv)
 {
-	QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+        QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QApplication app(argc, argv);
 	QApplication::setWindowIcon(QIcon(":qDo.svg"));
@@ -57,10 +54,6 @@ int main(int argc, char ** argv)
 
 	tray.setContextMenu(&contextMenu);
 
-	// Registering the interface.
-#ifdef Q_OS_ANDROID
-	KirigamiPlugin::().registerTypes();
-#endif
 	qmlRegisterType<Task>("ac.uk.cam.ap886", 1, 0, "Task");
 	qmlRegisterType<List>("core", 1, 0, "List");
 	qmlRegisterType<QQuickSettingInterface>("ac.uk.cam.ap886", 1,0, "SettingsInterface");

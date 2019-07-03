@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>qdolist_ru.qm</file>
+        <file>translations/qdolist_ru.qm</file>
     </qresource>
 </RCC>
