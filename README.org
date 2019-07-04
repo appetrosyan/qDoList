@@ -1,7 +1,9 @@
-#+TITLE: qDo a QML based todo-list manager. 
+#+TITLE: qDoList a QML based todo-list manager. 
 * What this is
 
-A holiday project of a physicist, trying not to forget how to write C++. 
+A holiday project of a physicist, trying not to forget how to write programs in C++. 
+
+The code quality leaves much to be desired, and most of what I did has a hacky feel to it. However the program is thoroughly tested, so it could be used as a daily driver. 
 
 It's a todo list manager. When it's in a finished (post-alpha) state, I expect it to be the same thing to Todoist, as KeepassX is to LastPass.
 
@@ -49,7 +51,7 @@ Disclaimer, This is not recommended, and is not the way you should be installing
 I intend to create appropriate packages, but they're not ready at this stage. 
 
 #+begin_src bash 
-git clone https://github.com/appetrosyan/qDo.git
+git clone https://github.com/appetrosyan/qDoList.git
 #+end_src
 
 Next enter the qDoList directoty, and run 
@@ -58,8 +60,15 @@ Next enter the qDoList directoty, and run
 qmake && make 
 #+end_src
 
-** Mac OS X
 Which in turn should create the executable. Put it in `/bin` or `/usr/bin`, give it permissions and use to your heart's content. 
+** On ArchLinux 
+The PKGBUILD is provided in the repository, so 
+
+#+begin_src bash
+makepkg -si
+#+end_src
+*** TODO AUR 
+Install using an AUR helper of your choosing (yay, aura etc.)
 * License. 
 
 This program is licensed as GPLv3. 
