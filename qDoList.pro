@@ -63,3 +63,8 @@ RESOURCES += todolist.qrc \
 DISTFILES += \
         Android/AndroidManifest.xml
 
+
+
+target.path = /usr/local/
+target.files = qDoList
+INSTALLS+=target
