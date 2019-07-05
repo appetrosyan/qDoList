@@ -21,8 +21,16 @@ Frame {
 			verticalAlignment: Text.AlignVCenter
 		}
 		onCurrentIndexChanged: {
+//			myFileList.get(currentIndex).requestAttention()
+			// This is semantically correct, but horrendously inefficient.
+			// Sure this only changes the model once per each change, however,
+			// The change itself is ... it occurs far too often and makes the
+			// experience janky.
+		}
+		onMovingChanged: {
 			myFileList.get(currentIndex).requestAttention()
 		}
+
 		onCountChanged: {
 			currentIndex = myFileList.activeTrackedFileIndex()
 		}

@@ -35,7 +35,6 @@ Kirigami.ApplicationWindow {
 	}
 	Material.accent: sysPallete.highlight
 	Material.theme: settings.darkMode?Material.Dark:Material.light
-
 	Kirigami.GlobalDrawer{
 		id:globalDrawer
 		showContentWhenCollapsed: true
@@ -51,7 +50,6 @@ Kirigami.ApplicationWindow {
 					loadTodoListDialog.write = false
 					loadTodoListDialog.selectExisting = true
 					loadTodoListDialog.visible = true
-
 				}
 			},
 			Kirigami.Action{
@@ -139,10 +137,17 @@ Kirigami.ApplicationWindow {
 		}
 
 	}
-	footer:TaskAdd {
+	footer:Rectangle{
+		z:0
+		color: sysPallete.window
+		width: parent.width
+		height: addTask.height - 5
+		TaskAdd {
 		id: addTask
 		onCreateNewTask: myModel.createNewTask(msg)
 	}
+	}
+
 	FileDialog {
 		id: loadTodoListDialog
 		title: "Choose your to-do list"
@@ -158,6 +163,7 @@ Kirigami.ApplicationWindow {
 			}
 		}
 	}
+
 	function currentYear() {
 		var date = new Date()
 		return Number(Qt.formatDate(date, "yyyy"))

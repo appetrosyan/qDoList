@@ -39,16 +39,19 @@ ListView {
 		Rectangle {
 			width: parent.width
 			height: childrenRect.height
-			color: Material.background
+			color: Qt.darker(sysPallete.window, 1+modelData.doneSubtaskCount/10)
+			radius: 15
 			InfoRow {
 				id: infoRow
 			}
 			Text {
+				anchors.top: infoRow.bottom
 				id: commentStrip
 				text: ("[%1/%2] %3")
 				.arg(modelData.doneSubtaskCount)
 				.arg(modelData.subtaskCount)
 				.arg(modelData.comment)
+				style: Text.Outline
 				x: 10
 				width: parent.width - x
 				visible: infoRow.expanded
@@ -58,6 +61,7 @@ ListView {
 
 			ListView {
 				x: 10
+				anchors.top: commentStrip.bottom
 				width: parent.width - x
 				height: childrenRect.height * infoRow.expanded
 				visible: infoRow.expanded ? 1 : 0

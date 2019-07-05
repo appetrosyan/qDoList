@@ -6,7 +6,7 @@ QT += qml quick quickcontrols2 widgets
 
 TARGET = qDoList
 INCLUDEPATH += .
-CONFIG+=C++14 lrelease embed_translations
+CONFIG+=C++14
 TRANSLATIONS = translations/qdolist_ru.ts
 MOC_DIR = moc
 OBJECTS_DIR = obj

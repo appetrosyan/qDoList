@@ -9,9 +9,11 @@ SwipeDelegate {
 	z: 0
 	height: 40
 	width: parent.width
+//	background: sysPallete.base
 
-	text: "<%1>%2</%1>".arg(model.modelData.done ? "s" : "b").arg(
-			  model.modelData.name)
+	text: "<%1>%2</%1>"
+	.arg(model.modelData.done ? "s" : "b")
+	.arg(model.modelData.name)
 	swipe.left: Rectangle {
 		width: parent.width
 		height: parent.height
@@ -24,7 +26,9 @@ SwipeDelegate {
 			}
 		}
 		Label {
-			text: qsTr("Release to Toggle")
+			text: modelData.doneSubtaskCount!==modelData.subtaskCount?
+					  qsTr("Finish subtasks first"):
+					  qsTr("Release to Toggle")
 			anchors.fill: parent
 			anchors.rightMargin: 10
 			horizontalAlignment: Qt.AlignRight
@@ -202,4 +206,5 @@ SwipeDelegate {
 		delay: 1000
 		visible: infoRow.pressed
 	}
+
 }
