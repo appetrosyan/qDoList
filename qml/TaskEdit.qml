@@ -35,6 +35,9 @@ Column {
 		anchors.left: parent.left
 		CheckBox {
 			id: check
+			checked: model.modelData.done
+			checkable: model.modelData.doneSubtaskCount === model.modelData.subtaskCount
+			enabled: checkable
 		}
 		TextField {
 			id: newName
@@ -43,7 +46,6 @@ Column {
 			onAccepted: {
 				model.modelData.name = text
 				editsFinished()
-
 			}
 		}
 	}

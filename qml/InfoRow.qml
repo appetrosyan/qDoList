@@ -1,6 +1,7 @@
 import QtQuick.Controls 2.0
 import QtQuick 2.0
 import QtQuick.Controls.Material 2.0
+import org.kde.kirigami 2.0 as Kirigami
 
 SwipeDelegate {
 	property bool expanded: false
@@ -9,11 +10,11 @@ SwipeDelegate {
 	z: 0
 	height: 40
 	width: parent.width
-//	background: sysPallete.base
-
 	text: "<%1>%2</%1>"
-	.arg(model.modelData.done ? "s" : "b")
+	.arg(model.modelData.done?"s":"b")
 	.arg(model.modelData.name)
+	focusPolicy: Qt.ClickFocus
+	highlighted: true
 	swipe.left: Rectangle {
 		width: parent.width
 		height: parent.height
@@ -42,8 +43,7 @@ SwipeDelegate {
 			}
 		}
 		Label {
-			text: !model.modelData.done ? qsTr("To-Do") : qsTr(
-											  "Done")
+			text: !model.modelData.done ? qsTr("To-Do") : qsTr("Done")
 			color: "white"
 			padding: 20
 			anchors.fill: parent
@@ -132,9 +132,8 @@ SwipeDelegate {
 				duration: 200
 			}
 		}
+		text: model.modelData.due.toLocaleDateString(locale, Locale.ShortFormat)
 		anchors.verticalCenter: parent.verticalCenter
-		text: model.modelData.due.toLocaleDateString(
-				  locale, Locale.ShortFormat)
 		visible: (infoRow.text.length * infoRow.font.pointSize * 0.6 < parent.width)
 	}
 
@@ -206,5 +205,6 @@ SwipeDelegate {
 		delay: 1000
 		visible: infoRow.pressed
 	}
+
 
 }

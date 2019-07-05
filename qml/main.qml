@@ -35,6 +35,7 @@ Kirigami.ApplicationWindow {
 	}
 	Material.accent: sysPallete.highlight
 	Material.theme: settings.darkMode?Material.Dark:Material.light
+	contextDrawer: editDialog
 	globalDrawer: Kirigami.GlobalDrawer{
 		id:globalDrawer
 		showContentWhenCollapsed: true
@@ -42,13 +43,15 @@ Kirigami.ApplicationWindow {
 		visible: !handleVisible
 		handle.anchors.top: rootWindow.top
 		handleVisible: rootWindow.width<600
-//		collapsible: !handleVisible
-//		collapsed: !handleVisible
+		//		collapsible: !handleVisible
+		//		collapsed: !handleVisible\
+		// The file Picker doens't look particularly good.
 		modal: handleVisible
 		actions: [
 			Kirigami.Action{
 				id: loadfromFileAction
 				text: qsTr("&Open file")
+				icon.name: "document-open"
 				shortcut: StandardKey.Open
 				onTriggered: {
 					loadTodoListDialog.write = false
@@ -58,7 +61,7 @@ Kirigami.ApplicationWindow {
 			},
 			Kirigami.Action{
 				text: qsTr("&Save as")
-				iconName: "file-save-as"
+				icon.name: "document-save-as"
 				shortcut: StandardKey.SaveAs
 				onTriggered: {
 					loadTodoListDialog.write = true
@@ -68,7 +71,7 @@ Kirigami.ApplicationWindow {
 			},
 			Kirigami.Action{
 				text: qsTr("S&ync all files")
-				iconName: "file-save"
+				icon.name: "document-save"
 				shortcut: StandardKey.Save
 				onTriggered: {
 					saveAllFiles()
@@ -139,17 +142,17 @@ Kirigami.ApplicationWindow {
 				}
 			}
 		}
-
 	}
 	footer:Rectangle{
 		z:0
 		color: sysPallete.window
 		width: parent.width
 		height: addTask.height - 5
+		radius: 15
 		TaskAdd {
-		id: addTask
-		onCreateNewTask: myModel.createNewTask(msg)
-	}
+			id: addTask
+			onCreateNewTask: myModel.createNewTask(msg)
+		}
 	}
 
 	FileDialog {

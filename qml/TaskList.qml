@@ -1,9 +1,10 @@
 import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick.Controls 2.12 as QQC2
 import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.0
 import ac.uk.cam.ap886 1.0
+import org.kde.kirigami 2.2 as Kirigami
 import core 1.0
 
 ListView {
@@ -41,27 +42,73 @@ ListView {
 			height: childrenRect.height
 			color: Qt.darker(sysPallete.window, 1+modelData.doneSubtaskCount/10)
 			radius: 15
-			InfoRow {
-				id: infoRow
-			}
-			Text {
-				anchors.top: infoRow.bottom
-				id: commentStrip
-				text: ("[%1/%2] %3")
-				.arg(modelData.doneSubtaskCount)
-				.arg(modelData.subtaskCount)
-				.arg(modelData.comment)
-				style: Text.Outline
-				x: 10
-				width: parent.width - x
-				visible: infoRow.expanded
-				color: Material.foreground
-				wrapMode: Text.Wrap
+//			InfoRow {
+//				id: infoRow
+			//			}
+			Kirigami.SwipeListItem {
+				property bool expanded:false
+				property var subTasks
+				id:infoRow
+				height: 32
+				QQC2.TextField {
+					id: nameEdit
+					text: modelData.name
+					visible: true
+					onEditingFinished: {
+						modelData.name = text
+					}
+				}
+				actions: [
+					Kirigami.Action{
+						icon.name: "accessories-text-editor"
+						onTriggered: editDialog.visible=true
+					},
+					Kirigami.Action {
+						icon.name: "edit-delete"
+						onTriggered: model.modelData.goAway()
+					}
+
+				]
+
+				onPressAndHold: {
+					modelData.goAway()
+				}
+				onDoubleClicked: {
+					modelData.promote()
+				}
+				onClicked: {
+					expanded = !expanded
+					if (model.modelData.hasChildren) {
+						subTasks = model.modelData.subModel
+					} else {
+						subTasks = []
+					}
+//					focus = true
+				}
 			}
 
+			Row{
+				anchors.top: infoRow.bottom
+				x: 10
+				width: parent.width - x
+				id: commentRow
+				Text {
+					id: commentStrip
+					text: ("%1").arg(modelData.comment)
+					visible: modelData.comment!=="" || modelData.subtaskCount !==0
+					color: Material.foreground
+					wrapMode: Text.Wrap
+				}
+				Text{
+					id: doneCounter
+					text: ("[%1/%2]").arg(modelData.doneSubtaskCount).arg(modelData.subtaskCount)
+					visible: modelData.subtaskCount > 0
+					color:  Material.foreground
+				}
+			}
 			ListView {
 				x: 10
-				anchors.top: commentStrip.bottom
+				anchors.top: commentRow.bottom
 				width: parent.width - x
 				height: childrenRect.height * infoRow.expanded
 				visible: infoRow.expanded ? 1 : 0
@@ -69,9 +116,10 @@ ListView {
 				Behavior on opacity {
 					NumberAnimation {
 						easing.type: Easing.OutBounce
-						duration: 300
+						duration: 500
 					}
 				}
+				populate: slideIn
 				delegate: accordion
 				// Now this is why QML is such a dumb idea. In normal assignment
 				// that the thing on the right wouldn't be the same as on the left:
@@ -82,8 +130,9 @@ ListView {
 				add: slideIn
 				remove: dropOut
 			}
-			Drawer {
-				modal: true
+			Kirigami.ContextDrawer{
+//				id: contextDrawer
+				modal: false
 				height: rootWindow.height
 				width: 250
 				id: editDialog
@@ -117,7 +166,7 @@ ListView {
 		}
 	}
 
-	Label {
+	QQC2.Label {
 		id: placeholder
 		text: qsTr("Empty")
 		anchors.margins: 60
