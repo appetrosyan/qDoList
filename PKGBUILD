@@ -1,18 +1,18 @@
-pkgname="qdolist"
 _realname="qDoList"
-maintainer="a-p-petrosyan@yandex.ru"
-pkgver=0.1a
+pkgname="${_realname,,}"	# viva Bash 4.0
+url="https://github.com/appetrosyan/qDoList"
+pkgver=v0.1.2.g85b2002
 pkgrel=1
 pkgdesc="A to-do list manager for KDE"
 arch=("x86_64")
 license=('GPL3')
-depends=(qt5-base qt5-declarative kdeclarative)
+depends=(qt5-declarative hicolor-icon-theme)
 makedepends=(git)
-# provides("${pkgname%-*}")	
 source=("git+https://github.com/appetrosyan/qDoList")
 sha256sums=('SKIP')
 
 pkgver() {
+    cd "$srcdir/$_realname"
     git describe --tags | sed -r 's/-/./g'
 }
 
@@ -22,7 +22,7 @@ prepare() {
 
 build() {
   cd "$srcdir/$_realname"
-  qmake $pkgname.pro 
+  qmake $_realname.pro 
   make 
 }
 
