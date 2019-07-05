@@ -1,4 +1,5 @@
-pkgname="qDoList"
+pkgname="qdolist"
+maintainer="a-p-petrosyan@yandex.ru"
 pkgver=0.1.0
 pkgrel=1
 pkgdesc="A to-do list manager for KDE"

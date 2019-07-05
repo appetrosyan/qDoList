@@ -4,7 +4,7 @@ import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.0
 import ac.uk.cam.ap886 1.0
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.6 as Kirigami
 import core 1.0
 
 ListView {
@@ -45,30 +45,38 @@ ListView {
 //			InfoRow {
 //				id: infoRow
 			//			}
-			Kirigami.SwipeListItem {
+			Kirigami.AbstractListItem {
 				property bool expanded:false
 				property var subTasks
 				id:infoRow
 				height: 32
-				QQC2.TextField {
-					id: nameEdit
-					text: modelData.name
-					visible: true
-					onEditingFinished: {
-						modelData.name = text
-					}
-				}
-				actions: [
-					Kirigami.Action{
-						icon.name: "accessories-text-editor"
-						onTriggered: editDialog.visible=true
-					},
-					Kirigami.Action {
-						icon.name: "edit-delete"
-						onTriggered: model.modelData.goAway()
+				RowLayout{
+					Kirigami.ListItemDragHandle{
+						listItem: infoRow
+						listView: listView
+//						onMoveRequested: listModel.move(oldIndex, newIndex, 1)
 					}
 
-				]
+					QQC2.TextField {
+						id: nameEdit
+						text: modelData.name
+						visible: true
+						onEditingFinished: {
+							modelData.name = text
+						}
+					}
+				}
+//				actions: [
+//					Kirigami.Action{
+//						icon.name: "accessories-text-editor"
+//						onTriggered: editDialog.visible=true
+//					},
+//					Kirigami.Action {
+//						icon.name: "edit-delete"
+//						onTriggered: model.modelData.goAway()
+//					}
+
+//				]
 
 				onPressAndHold: {
 					modelData.goAway()
