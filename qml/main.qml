@@ -35,12 +35,16 @@ Kirigami.ApplicationWindow {
 	}
 	Material.accent: sysPallete.highlight
 	Material.theme: settings.darkMode?Material.Dark:Material.light
-	Kirigami.GlobalDrawer{
+	globalDrawer: Kirigami.GlobalDrawer{
 		id:globalDrawer
 		showContentWhenCollapsed: true
 		title: i18n("QDoList")
-		visible: true
-		//		modal: true
+		visible: !handleVisible
+		handle.anchors.top: rootWindow.top
+		handleVisible: rootWindow.width<600
+//		collapsible: !handleVisible
+//		collapsed: !handleVisible
+		modal: handleVisible
 		actions: [
 			Kirigami.Action{
 				id: loadfromFileAction
