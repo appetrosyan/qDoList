@@ -1,6 +1,7 @@
 pkgname="qdolist"
+_realname="qDoList"
 maintainer="a-p-petrosyan@yandex.ru"
-pkgver=0.1.0
+pkgver=0.1a
 pkgrel=1
 pkgdesc="A to-do list manager for KDE"
 arch=("x86_64")
@@ -11,18 +12,21 @@ makedepends=(git)
 source=("git+https://github.com/appetrosyan/qDoList")
 sha256sums=('SKIP')
 
+pkgver() {
+    git describe --tags
+}
 prepare() {
-  cd "$srcdir/$pkgname"
+  cd "$srcdir/$_realname"
 }
 
 build() {
-  cd "$srcdir/$pkgname"
+  cd "$srcdir/$_realname"
   qmake $pkgname.pro 
   make 
 }
 
 package(){
-    cd "$srcdir/$pkgname"
-    install -D -m755 $pkgname "$pkgdir/usr/bin/$pkgname"
-    install -D -m644 "Icons/qDo.svg" "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname.svg"
+    cd "$srcdir/$_realname"
+    install -D -m755 $_realname "$pkgdir/usr/bin/$pkgname"
+    install -D -m644 "Icons/qDo.svg" "$pkgdir/usr/share/icons/hicolor/scalable/apps/$_realname.svg"
 }
