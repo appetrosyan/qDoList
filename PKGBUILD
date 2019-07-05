@@ -13,8 +13,9 @@ source=("git+https://github.com/appetrosyan/qDoList")
 sha256sums=('SKIP')
 
 pkgver() {
-    git describe --tags
+    git describe --tags | sed -r 's/-/./g'
 }
+
 prepare() {
   cd "$srcdir/$_realname"
 }
