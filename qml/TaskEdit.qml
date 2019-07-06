@@ -3,6 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
 import Qt.labs.calendar 1.0
 import QtQuick.Layouts 1.0
+import "dateFunctions.js" as DF
 
 Column {
 	property var scheduled: model.modelData.scheduled
@@ -76,7 +77,7 @@ Column {
 		}
 		DatePicker {
 			date: model.modelData.added
-			currentYear: thisYear
+			currentYear: DF.currentYear()
 			Layout.alignment: Qt.AlignRight
 			padding: 12
 			editable: false
@@ -90,7 +91,7 @@ Column {
 			padding: 12
 		}
 		DatePicker {
-			currentYear: thisYear
+			currentYear: DF.currentYear()
 			date: model.modelData.scheduled
 			color: "cyan"
 			Layout.alignment: Qt.AlignRight
@@ -109,7 +110,7 @@ Column {
 		}
 		DatePicker {
 			date: model.modelData.due
-			currentYear: thisYear
+			currentYear: DF.currentYear()
 			padding: 12
 			color: "red"
 			Layout.alignment: Qt.AlignRight
@@ -133,8 +134,8 @@ Column {
 		}
 		MonthGrid {
 			id: grid
-			year: thisYear
-			month: thisMonth
+			year: DF.currentYear()
+			month: DF.currentMonth()
 			property bool updateDue: false
 			onClicked: {
 				if(updateDue){
@@ -153,7 +154,7 @@ Column {
 			delegate: Text{
 				horizontalAlignment: Text.AlignHCenter
 				verticalAlignment: Text.AlignVCenter
-				opacity: (model.month === thisMonth) ? (model.day === thisDay?1:0.5) : 0.1
+				opacity: (model.month === DF.currentMonth() ) ? (model.day === DF.currentDay()?1:0.5) : 0.1
 				text: model.day
 				font.pointSize: 14
 				color: (model.day===Number(Qt.formatDate(due,"dd")) ) ?"red":(model.day===Number(Qt.formatDate(scheduled, "dd"))?"cyan":Material.foreground)

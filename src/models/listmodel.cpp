@@ -78,8 +78,19 @@ void List::move(int from, int to)
 	}
 }
 
-bool List::moveRows(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild)
+bool List::moveRows(const QModelIndex& sourceParent, int sourceFirst, int sourceLast, const QModelIndex& destinationParent, int destinationChild)
 {
+	if(sourceParent != destinationParent){
+		return false;
+	}
+	if(inBounds(sourceFirst) && inBounds(destinationChild)){
+		if(beginMoveRows(sourceParent, sourceFirst, sourceLast, destinationParent, destinationChild))
+			_data.move(sourceFirst, sourceLast);
+		endMoveRows();
+		return true;
+	}
+
+	return false;
 
 }
 

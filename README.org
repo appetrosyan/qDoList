@@ -8,7 +8,9 @@ The code quality leaves much to be desired, and most of what I did has a hacky f
 It's a todo list manager. When it's in a finished (post-alpha) state, I expect it to be the same thing to Todoist, as KeepassX is to LastPass.
 
  - [X] TODO tasks that can be toggled by swiping left to right. 
- - [X] Tasks can be moved up and down.
+ - [ ] Tasks can be moved
+   - [ ] up and down within the same model
+   - [ ] promoted and de-moted across models
  - [X] Multiple todo lists can be, [5/5]
    - [X] loaded
    - [X] Saved
@@ -75,7 +77,59 @@ This program is licensed as GPLv3.
 
 This means that you can take it. You can modify it, but you need to let me know what changes you've made, and commit them upstream. 
 
+* The educational value of this project
 
+I've created gui application in Java, C++ using many toolkits, C# and HTML. 
+
+What I've found is the following: QML compares negatively to every one of them. 
+
+** The pros: 
+- bindings are a convenient feature
+- the language is built from the ground up to accommodate UI design.
+- Animations and states allow for truly interesting designs, that are easily put together.
+
+** Cons: 
+- Looks /ugly/ unless you do *a lot* of tinkering. 
+- The design tools are useless.
+  - They crash every five +minutes+ seconds.
+  - KDevelop doens't interpret the QML very well.
+  - Surprisingly, QtCreator is even worse at that.
+- The linters
+  - Do not detect an issue when its there.
+  - Detect an issue when it isn't
+  - Do not provide basic help with JavaScript.
+- C++ interfacing is ... it's shit.
+  - Widgets were directly accessible without any translations, and can be put together from .ui files.
+  - Every C++ type had simple and understandable semantics, the interface was purely declarative, while the backend handled *all* of the logic.
+  - SIgnals sent from UI elements were the ONLY and non-redundant way of interfacing with C++.
+- Front-Back communication is redundant and inefficient.
+  - Sending a signal from QML. It's slow, you need to have MOC, and most of the time there's no type checking.
+  - Invoking a method directly from QML. you need to have an ugly global variable, but so far it's the simplest. The only thing is that the function needs to be declared a slot, MOC'd and there's no type checking.
+  - Reading and writing to QML properties from C++. It's like the ugly global variable approach... only worse. It also defeats the purpose of having QML.
+
+- Compare that with the simple approach of widgets.
+  - Every widget had an object name, it was accessible with its type, and had signals.
+  - You could have connected sophisticated signals that sent data to sophisticated slots. (e.g. sent data)
+  - With C++11 support, you could have type-checked compile time function reference signal/slot connections.
+
+- It's an interpreted language.
+  - With QtQuick controls 2, you cannot have a C++ widget embedded in QML.
+  - In theory every controls element can be implemented in C++. However since object aggregation cannot be done the same way, you cannot actually compile a widget, it's always interpreted.
+  - Things are slow. Sure they did GPU offloading, but surprisingly the program is slower. What's the point of using it?
+- It's not providing a Native Look and Feel.
+  - The widgets are gone, and QQC2 is not bringing them back.
+  - Things on Linux need to be painfully adjusted to fall in line with the surrounding applications.
+  - On Mac OS X, QML implements so few of the API's that the application doens't even attempt to look normal.
+  - Sometimes lack of native integration breaks workflow, e.g. no native menubar support made my BetterTouchTool setup redundant
+- It has no identity of its own.
+- The C++ debugging tools are useless.
+- There are no QML debugging tools.
+- 
+
+
+
+
+ 
 * Donating. 
 
 At this point, there's no reason to donate, however, if you decide that you want to help, here's a few options. 

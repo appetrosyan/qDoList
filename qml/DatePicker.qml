@@ -4,8 +4,8 @@ import QtQuick.Layouts 1.12
 
 Label {
 	id: picker
+	property int currentYear: 2019
 	property var date: Date.now()
-	property var currentYear: 2019
 	property var editable: true
 	signal newDate(string msg)
 	text: date.toLocaleDateString(locale, Locale.ShortFormat)
@@ -53,7 +53,7 @@ Label {
 						// This kids is why implicit conversions are a bad idea.
 						// Sure it might be hard to write toInt(), but not having +7
 						// do what you expect it to do is worse.
-						// #FuckJavaScript 
+						// #FuckJavaScript
 						picker.newDate(Qt.formatDateTime(dateTime, "yyyy-MM-dd hh:mm"))
 					}
 				}
@@ -111,7 +111,7 @@ Label {
 					Layout.fillWidth: true
 					Layout.leftMargin: 7
 					Layout.rightMargin: 7
-				}   
+				}
 			}
 
 		}

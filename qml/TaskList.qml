@@ -45,17 +45,12 @@ ListView {
 //			InfoRow {
 //				id: infoRow
 			//			}
-			Kirigami.AbstractListItem {
+			Kirigami.SwipeListItem {
 				property bool expanded:false
 				property var subTasks
 				id:infoRow
 				height: 32
 				RowLayout{
-					Kirigami.ListItemDragHandle{
-						listItem: infoRow
-						listView: listView
-//						onMoveRequested: listModel.move(oldIndex, newIndex, 1)
-					}
 
 					QQC2.TextField {
 						id: nameEdit
@@ -66,17 +61,17 @@ ListView {
 						}
 					}
 				}
-//				actions: [
-//					Kirigami.Action{
-//						icon.name: "accessories-text-editor"
-//						onTriggered: editDialog.visible=true
-//					},
-//					Kirigami.Action {
-//						icon.name: "edit-delete"
-//						onTriggered: model.modelData.goAway()
-//					}
+				actions: [
+					Kirigami.Action{
+						iconName: "accessories-text-editor"
+						onTriggered: editDialog.visible=true
+					},
+					Kirigami.Action {
+						iconName: "edit-delete"
+						onTriggered: model.modelData.goAway()
+					}
 
-//				]
+				]
 
 				onPressAndHold: {
 					modelData.goAway()
@@ -183,7 +178,6 @@ ListView {
 		visible: listView.count === 0
 		horizontalAlignment: Qt.AlignHCenter
 		verticalAlignment: Qt.AlignVCenter
-		wrapMode: Label.WordWrap
 		font.pixelSize: 18
 	}
 }

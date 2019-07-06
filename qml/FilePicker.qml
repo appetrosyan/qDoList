@@ -10,15 +10,26 @@ Frame {
 	Tumbler {
 		z: 1
 		height: 100
+		wheelEnabled: true
 		anchors.fill: parent
 		model: myFileList
 		wrap: true
-		delegate: Label {
-			id: fileFromTumbler
-			text: model.modelData.fileName + (model.modelData.isModified?"*":"")
-			opacity: 1.0 - Math.abs(Tumbler.displacement) / (Tumbler.tumbler.visibleItemCount / 4)
-			horizontalAlignment: Text.AlignHCenter
-			verticalAlignment: Text.AlignVCenter
+		smooth: true
+		delegate: Row{
+//			opacity: model.index - fileFromTumbler.currentIndex
+			CheckBox{
+				id: check
+				checkable: false
+				checked: model.modelData.isBinary
+			}
+			Label {
+				id: fileFromTumbler
+				text: model.modelData.fileName + (model.modelData.isModified?"*":"")
+				color: model.modelData.isBinary?"cyan":sysPallete.text
+//				opacity: Tumbler.currentIndex/10
+				horizontalAlignment: Text.AlignHCenter
+				verticalAlignment: Text.AlignVCenter
+			}
 		}
 		onCurrentIndexChanged: {
 //			myFileList.get(currentIndex).requestAttention()

@@ -5,7 +5,7 @@ import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Dialogs 1.2
 import QSettings 1.0
-import org.kde.kirigami 2.0 as Kirigami
+import org.kde.kirigami 2.6 as Kirigami
 import ac.uk.cam.ap886 1.0
 import core 1.0
 
@@ -13,7 +13,7 @@ Kirigami.ApplicationWindow {
 	id: rootWindow
 	width: 300
 	minimumWidth: 300
-	height: 400
+	height: 500
 	minimumHeight: 400
 	title: qsTr("qDolist") + " — [%1/%2]: %3%4".arg(myModel.completeTasks)
 	.arg(myModel.size)
@@ -35,7 +35,6 @@ Kirigami.ApplicationWindow {
 	}
 	Material.accent: sysPallete.highlight
 	Material.theme: settings.darkMode?Material.Dark:Material.light
-	contextDrawer: editDialog
 	globalDrawer: Kirigami.GlobalDrawer{
 		id:globalDrawer
 		showContentWhenCollapsed: true
@@ -51,7 +50,7 @@ Kirigami.ApplicationWindow {
 			Kirigami.Action{
 				id: loadfromFileAction
 				text: qsTr("&Open file")
-				icon.name: "document-open"
+				iconName: "document-open"
 				shortcut: StandardKey.Open
 				onTriggered: {
 					loadTodoListDialog.write = false
@@ -61,7 +60,7 @@ Kirigami.ApplicationWindow {
 			},
 			Kirigami.Action{
 				text: qsTr("&Save as")
-				icon.name: "document-save-as"
+				iconName: "document-save-as"
 				shortcut: StandardKey.SaveAs
 				onTriggered: {
 					loadTodoListDialog.write = true
@@ -71,7 +70,7 @@ Kirigami.ApplicationWindow {
 			},
 			Kirigami.Action{
 				text: qsTr("S&ync all files")
-				icon.name: "document-save"
+				iconName: "document-save"
 				shortcut: StandardKey.Save
 				onTriggered: {
 					saveAllFiles()
@@ -136,9 +135,6 @@ Kirigami.ApplicationWindow {
 					pixelAligned: false
 					transformOrigin: Item.Center
 					model: myModel
-					thisYear: currentYear()
-					thisMonth: currentMonth() - 1
-					thisDay: currentDay
 				}
 			}
 		}
@@ -146,9 +142,11 @@ Kirigami.ApplicationWindow {
 	footer:Rectangle{
 		z:0
 		color: sysPallete.window
-		width: parent.width
+		width: rootWindow.width
 		height: addTask.height - 5
 		radius: 15
+		border.color: sysPallete.highlight
+		border.width: 1
 		TaskAdd {
 			id: addTask
 			onCreateNewTask: myModel.createNewTask(msg)
@@ -169,18 +167,5 @@ Kirigami.ApplicationWindow {
 				loadFromFile(loadTodoListDialog.fileUrl)
 			}
 		}
-	}
-
-	function currentYear() {
-		var date = new Date()
-		return Number(Qt.formatDate(date, "yyyy"))
-	}
-	function currentMonth() {
-		var date = new Date()
-		return Number(Qt.formatDate(date, "MM"))
-	}
-	function currentDay() {
-		var date = new Date()
-		return Number(Qt.formatDate(date, "dd"))
 	}
 }

@@ -27,7 +27,7 @@ public slots:
 	QObject *take(int i);
 	QObject *get(int i);
 	void move(int from, int to);
-	bool moveRows(const QModelIndex& sourceParent, int sourceRow, const QModelIndex& destinationParent, int destinationChild );
+	bool moveRows(const QModelIndex& sourceParent, int sourceRow,int sourceLast,  const QModelIndex& destinationParent, int destinationChild ) override;
 	void add(QObject * o);
 	void internalChange(QObject * o);
 	bool isEmpty();

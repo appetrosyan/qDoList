@@ -10,6 +10,7 @@
         <file alias="qDo.svg">Icons/qDo.svg</file>
         <file alias="qDo.png">Icons/qDo.png</file>
         <file>qml/InfoRow.qml</file>
+        <file>qml/dateFunctions.js</file>
     </qresource>
     <qresource prefix="/Images">
         <file>Icons/move.svg</file>

@@ -24,7 +24,7 @@ bool TrackedFile::open(const QIODevice::OpenMode& flags)
 
 void TrackedFile::write(const QJsonDocument& json)
 {
-	m_file->write(json.toJson());
+	m_file->write(m_isBinary?json.toBinaryData():json.toJson());
 }
 
 
@@ -35,7 +35,7 @@ void TrackedFile::close()
 }
 
 
-QString TrackedFile::fileName(){ 	return m_url.fileName();}
+QString TrackedFile::fileName(){return m_url.fileName();}
 
 
 void TrackedFile::setModified(bool newModified)
@@ -44,10 +44,21 @@ void TrackedFile::setModified(bool newModified)
 	emit modifiedChanged();
 }
 
-QString TrackedFile::fullPath(){	return m_url.path();}
+bool TrackedFile::isBinary(){
+	return m_isBinary;
+}
+
+void TrackedFile::setBinary(bool newBinary){
+	if(m_isBinary!=newBinary){
+		m_isBinary=newBinary;
+		emit binaryChanged();
+	}
+}
+
+QString TrackedFile::fullPath(){return m_url.path();}
 
 
-bool TrackedFile::modified(){	return m_modified;}
+bool TrackedFile::modified(){return m_modified;}
 
 
 bool TrackedFile::openIfExists(const QIODevice::OpenMode& flags)
@@ -78,7 +89,7 @@ TrackedFile& TrackedFile::setTaskList(TaskListModel* newTaskList)
 }
 
 
-TaskListModel& TrackedFile::taskList()	{ return *m_taskList;}
+TaskListModel& TrackedFile::taskList()	{return *m_taskList;}
 
 
 void TrackedFile::requestAttention()	{emit wantAttention(this);}
@@ -107,7 +118,13 @@ void TrackedFile::loadFromFile()
 {
 	if(openIfExists(QIODevice::ReadOnly)){
 		QByteArray saveData = readAll();
-		QJsonDocument loadDoc= QJsonDocument::fromJson(saveData);
+		QJsonDocument loadDoc;
+		if(m_isBinary)
+			loadDoc= QJsonDocument::fromBinaryData(saveData);
+		if(loadDoc.isNull()){
+			loadDoc= QJsonDocument::fromJson(saveData);
+			setBinary(false);
+		}
 		close();
 		if(loadDoc.isEmpty()){
 			qDebug() << "Ignoring empty document";
