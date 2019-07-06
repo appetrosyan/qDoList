@@ -84,7 +84,18 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 	connect(window, SIGNAL(writeToFile(QString)), this, SLOT(saveModelToFile(QString)));
 	connect(window, SIGNAL(loadFromFile(QString)), this, SLOT(loadModelFromFile(QString)));
 	connect(window, SIGNAL(saveAllFiles()), this, SLOT(syncAllFiles()));
-	connect(window, SIGNAL(requestTaskList()), this, SLOT(printAllTasksToConsole()));
+	connect(window, SIGNAL(requestTaskList()), this, SLOT(void QMLSignalHandler::lastFocusedGuard()
+	{
+															  if(Task::lastFocusedTask==nullptr){
+																  qobject_cast<Task*>(taskList->_data.back())->requestFocus();
+															  }
+														  }
+
+														  printAllTasksToConsole()));
+	connect(window, SIGNAL(moveFocusedTaskUp()), this, SLOT(moveCurrentlyFocusedTaskUp()));
+	connect(window, SIGNAL(moveFocusedTaskDown()), this, SLOT(moveCurrentlyFocusedTaskDown()));
+	connect(window, SIGNAL(demoteFocusedTask()), this, SLOT(demoteCurrentlyFocusedTask()));
+	connect(window, SIGNAL(promoteFocusedTask()), this, SLOT(promoteCurrentlyFocusedTask()));
 	auto* doc = childObject<QQuickTextDocument*>(engine, "textEditor", "textDocument");
 	auto* parser = new NaturalLanguageHighlighter(doc->textDocument());
 	Q_UNUSED(parser);
@@ -94,6 +105,35 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 void QMLSignalHandler::resetContext()
 {
 	engine.rootContext()->setContextProperty("myModel", &fileList->activeTrackedFile()->taskList());
+}
+
+void QMLSignalHandler::lastFocusedGuard(){
+	if(Task::lastFocusedTask==nullptr){
+		qobject_cast<Task*> (taskList->_data.back())->requestFocus();
+	}
+}
+void QMLSignalHandler::moveCurrentlyFocusedTaskUp()
+{
+	lastFocusedGuard();
+	Task::lastFocusedTask->moveUp();
+}
+
+void QMLSignalHandler::moveCurrentlyFocusedTaskDown()
+{
+	lastFocusedGuard();
+	Task::lastFocusedTask->moveDown();
+}
+
+void QMLSignalHandler::demoteCurrentlyFocusedTask()
+{
+	lastFocusedGuard();
+	Task::lastFocusedTask->demote();
+}
+
+void QMLSignalHandler::promoteCurrentlyFocusedTask()
+{
+	lastFocusedGuard();
+	Task::lastFocusedTask->promote();
 }
 
 

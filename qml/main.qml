@@ -30,9 +30,14 @@ Kirigami.ApplicationWindow {
 	signal loadFromFile(string file)
 	signal saveAllFiles()
 	signal requestTaskList()
+	signal moveFocusedTaskUp()
+	signal moveFocusedTaskDown()
+	signal demoteFocusedTask()
+	signal promoteFocusedTask()
 	SystemPalette{
 		id: sysPallete
 	}
+
 	Material.accent: sysPallete.highlight
 	Material.theme: settings.darkMode?Material.Dark:Material.light
 	globalDrawer: Kirigami.GlobalDrawer{

@@ -8,6 +8,7 @@
 
 
 QVector<Task*> Task::globalRegister;
+Task* Task::lastFocusedTask=nullptr;
 
 Task::Task(QString text, bool done, QDateTime added, QDateTime scheduled, QDateTime due, QObject* parent) :
 	QObject(parent),
@@ -33,6 +34,9 @@ Task::Task(const QJsonObject& json, QObject *parent) : m_done(false)
 Task::~Task()
 {
 	globalRegister.remove(globalRegister.indexOf(this));
+	if(lastFocusedTask == this){
+		lastFocusedTask=nullptr;
+	}
 }
 
 bool Task::isEverySubtaskDone() const
@@ -131,6 +135,18 @@ void Task::moveDown(int dx)
 {
 	int x = m_superModel->indexOf(this);
 	m_superModel->move(x, x+dx);
+}
+
+Task& Task::requestFocus(){
+	if(lastFocusedTask!=this){
+		Task* old=lastFocusedTask;
+		lastFocusedTask=this;
+		if(old){
+			emit old->lastFocusedChanged();
+		}
+		emit lastFocusedChanged();
+	}
+	return *this;
 }
 
 bool Task::done() const { return m_done;}

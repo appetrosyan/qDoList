@@ -27,6 +27,7 @@ class Task : public QObject {
 	Q_PROPERTY(int subtaskCount READ subtaskCount NOTIFY childrenChanged)
 	Q_PROPERTY(int doneSubtaskCount READ doneSubtaskCount NOTIFY childToggled)
 	Q_PROPERTY(QString prettyDueDate READ prettyDueDate NOTIFY dueChanged)
+	Q_PROPERTY(bool isLastFocused READ isLastFocused NOTIFY lastFocusedChanged)
 public:
 	explicit Task(QString text="",
 				  bool done = false,
@@ -40,6 +41,7 @@ public:
 	~Task() override;
 
 	static QVector<Task*> globalRegister;
+	static Task* lastFocusedTask;
 
 	bool isEverySubtaskDone() const;
 	Task& setSuperModel(List* superModel);
@@ -69,6 +71,9 @@ public:
 	Task& setComment(const QString& msg);
 	Task& setSuperModel(TaskListModel* superModel);
 	void forwardSignal();
+	bool isLastFocused(){
+		return lastFocusedTask==this;
+	}
 
 
 signals:
@@ -81,6 +86,7 @@ signals:
 	void childrenChanged();
 	void commentChanged();
 	void childToggled();
+	void lastFocusedChanged();
 
 public slots:
 	Q_INVOKABLE bool  isOverDue() const;
@@ -90,6 +96,7 @@ public slots:
 	Q_INVOKABLE void promote();
 	Q_INVOKABLE void moveUp(int dx=1);
 	Q_INVOKABLE void moveDown(int dx=1);
+	Q_INVOKABLE Task& requestFocus();
 private:
 	QDateTime m_added;
 	QDateTime m_scheduled;

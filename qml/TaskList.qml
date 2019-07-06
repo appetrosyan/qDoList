@@ -12,8 +12,10 @@ ListView {
 	property var thisYear
 	property var thisMonth
 	property var thisDay
-	move: slideIn
 	add: slideIn
+	remove: dropOut
+	moveDisplaced:smoothShuffle
+	move: smoothShuffle
 	Transition {
 		id: slideIn
 		NumberAnimation {
@@ -24,16 +26,27 @@ ListView {
 			easing.type: Easing.OutBounce
 		}
 	}
-	remove: dropOut
 	Transition {
 		id: dropOut
 		NumberAnimation {
-			properties: "y"
-			to: 1000
-			duration: 1000
-			easing.type: Easing.InOutQuad
+			easing.amplitude: 1.05
+			properties: "x"
+			to: 300
+			duration: 400
+			easing.type: Easing.InExpo
 		}
 	}
+
+	Transition{
+		id:smoothShuffle
+			NumberAnimation{
+				properties: "y"
+				to: accordion.height
+				duration: 1000
+				easing.type: Easing.InOutCubic
+			}
+		}
+
 	delegate: accordion
 	Component {
 		id: accordion
@@ -42,6 +55,7 @@ ListView {
 			height: childrenRect.height
 			color: Qt.darker(sysPallete.window, 1+modelData.doneSubtaskCount/10)
 			radius: 15
+
 //			InfoRow {
 //				id: infoRow
 			//			}
@@ -63,7 +77,7 @@ ListView {
 						id: nameEdit
 						text: modelData.name
 						visible: true
-						color:  sysPallete.text
+						color:  modelData.isLastFocused?sysPallete.highlight:sysPallete.text
 						onEditingFinished: {
 							modelData.name = text
 						}
@@ -89,11 +103,13 @@ ListView {
 				}
 				onClicked: {
 					expanded = !expanded
+					model.modelData.requestFocus()
 					if (model.modelData.hasChildren) {
 						subTasks = model.modelData.subModel
 					} else {
 						subTasks = []
 					}
+
 //					focus = true
 				}
 			}
@@ -130,7 +146,6 @@ ListView {
 						duration: 500
 					}
 				}
-				populate: slideIn
 				delegate: accordion
 				// Now this is why QML is such a dumb idea. In normal assignment
 				// that the thing on the right wouldn't be the same as on the left:
@@ -140,10 +155,12 @@ ListView {
 				interactive: false
 				add: slideIn
 				remove: dropOut
+				moveDisplaced:smoothShuffle
+				move: smoothShuffle
 			}
 			Kirigami.ContextDrawer{
 //				id: contextDrawer
-				modal: false
+				modal: true
 				height: rootWindow.height
 				width: 250
 				id: editDialog

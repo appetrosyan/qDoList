@@ -70,20 +70,31 @@ void TaskListModel::createNewTask(QString taskName)
 			append(newTask);
 		}
 		else {
-			if(c.captured(1).contains("-")){
-//				qDebug() << "TODO implement subtaskgin";
-				UNFUCK(_data.back())->addSubTask(new Task(c.captured(2)));
-				emit changesMade();
-			}
 			if(c.captured(1).contains("+")){
-				QStringList names;
 				for(auto x: _data){
 					auto y = UNFUCK(x);
-					names<<x->property("name").toString();
 					if(y->text().startsWith(c.captured(2))){
 						y->toggle();
 					}
 				}
+			}
+			if(c.captured(1).contains("-")){
+//				Task* currentTask=UNFUCK(_data.back());
+				if(Task::lastFocusedTask==nullptr){
+					Task::lastFocusedTask=UNFUCK(_data.back());
+				}else {
+					qDebug() << Task::lastFocusedTask->text();
+				}
+				for(int i=0; i<c.captured(1).count('-')-1;++i){
+					if(Task::lastFocusedTask->subModel()->rowCount()!=0){
+						UNFUCK(Task::lastFocusedTask->subModel()->_data.back())->requestFocus();
+						qDebug() << Task::lastFocusedTask->text();
+					}else {
+						break;
+					}
+				}
+				Task::lastFocusedTask->addSubTask(new Task(c.captured(2)));
+				emit changesMade();
 			}
 		}
 	}

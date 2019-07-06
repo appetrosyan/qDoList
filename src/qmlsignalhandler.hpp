@@ -23,6 +23,8 @@ class QQuickSettingInterface;
 
 class QMLSignalHandler : public QObject{
 	Q_OBJECT
+	void lastFocusedGuard();
+
 public:
 	explicit QMLSignalHandler(QGuiApplication* app, QObject* parent=nullptr);
 	QSettings* m_settings;
@@ -43,4 +45,8 @@ public slots:
 	void receiveTask(Task* t);
 	void printAllTasksToConsole();
 	void resetContext();
+	void moveCurrentlyFocusedTaskUp();
+	void moveCurrentlyFocusedTaskDown();
+	void demoteCurrentlyFocusedTask();
+	void promoteCurrentlyFocusedTask();
 };

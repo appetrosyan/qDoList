@@ -11,5 +11,5 @@ namespace TaskLang{
 	static const QRegularExpression scheduled("(?:(?:(?:s\\h*=)|(?:since)|(?:начиная\\h*со*))\\h*"+QString(date),QRegularExpression::CaseInsensitiveOption);
 	static const QRegularExpression subTasks("\\D*\\h*((?|:(\\D{1,2}.*)|{\\h*([^} ]+)\\h*}))\\h*$");
 	static const QRegularExpression comment("\\(((?:\\h*\\w+\\h*)+)\\)");
-	static const QRegularExpression command("\\h*([-+])*\\h*(.*)");
+	static const QRegularExpression command("\\h*([-+]*)\\h*(.*)");
 }

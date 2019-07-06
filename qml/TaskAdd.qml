@@ -29,6 +29,23 @@ RowLayout {
 			Keys.onReturnPressed: {
 				editingFinished()
 			}
+			Keys.onUpPressed: {
+				rootWindow.moveFocusedTaskUp()
+			}
+			Keys.onDownPressed: {
+				rootWindow.moveFocusedTaskDown()
+			}
+			Keys.onTabPressed: {
+				rootWindow.demoteFocusedTask()
+			}
+			Keys.onBacktabPressed: {
+				rootWindow.promoteFocusedTask()
+			}
+
+//			Keys.forwardTo: [rootWindow]
+			// Unfortunately this doesn't work as expected.
+			// QML documentation is like Trump's speech. Sometimes you're not sure
+			// that the devs know what words mean.
 			onEditingFinished: {
 				if(newTask.text != placeholder){
 					createNewTask(newTask.text)
