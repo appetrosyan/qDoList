@@ -34,6 +34,7 @@ Kirigami.ApplicationWindow {
 	signal moveFocusedTaskDown()
 	signal demoteFocusedTask()
 	signal promoteFocusedTask()
+	signal toggleFocusedTask()
 	SystemPalette{
 		id: sysPallete
 	}
@@ -80,7 +81,15 @@ Kirigami.ApplicationWindow {
 				onTriggered: {
 					saveAllFiles()
 				}
+			},
+			Kirigami.Action{
+				text: qsTr("Toggle Active Task")
+				shortcut: StandardKey.AddTab
+				onTriggered: {
+					toggleFocusedTask()
+				}
 			}
+
 		]
 		FilePicker{
 			id: filePicker
@@ -160,7 +169,7 @@ Kirigami.ApplicationWindow {
 
 	FileDialog {
 		id: loadTodoListDialog
-		title: "Choose your to-do list"
+		title: qsTr("Choose your to-do list %1").arg(write?"to write":"to read")
 		folder: shortcuts.home
 		property bool write: false
 		onAccepted: {

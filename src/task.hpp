@@ -90,7 +90,7 @@ signals:
 
 public slots:
 	Q_INVOKABLE bool  isOverDue() const;
-	Q_INVOKABLE Task& toggle();
+	Q_INVOKABLE bool toggle();
 	Q_INVOKABLE void goAway();
 	Q_INVOKABLE void demote();
 	Q_INVOKABLE void promote();

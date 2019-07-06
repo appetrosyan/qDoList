@@ -39,13 +39,14 @@ ListView {
 
 	Transition{
 		id:smoothShuffle
-			NumberAnimation{
-				properties: "y"
-				to: accordion.height
-				duration: 1000
-				easing.type: Easing.InOutCubic
-			}
+		NumberAnimation{
+			properties: "y"
+			to: accordion.height
+			duration: 1000
+			easing.type: Easing.InOutCubic
 		}
+	}
+
 
 	delegate: accordion
 	Component {
@@ -68,8 +69,26 @@ ListView {
 					QQC2.CheckBox{
 						id: check
 						checkState: !modelData.done? (modelData.doneSubtaskCount >0 ? 1:0):2
-						onCheckedChanged: {
-							model.modelData.toggle()
+						checkable: false
+						onClicked: {
+							if(!modelData.toggle()){
+								shake.start()
+							}
+						}
+						SequentialAnimation on x{
+							id: shake
+							NumberAnimation {
+								from: 0
+								to: 10
+								duration: 80
+								easing.type: Easing.InOutBounce
+							}
+							NumberAnimation{
+								from: 10
+								to: 0
+								duration: 150
+								easing.type: Easing.InOutBounce
+							}
 						}
 					}
 
@@ -78,8 +97,31 @@ ListView {
 						text: modelData.name
 						visible: true
 						color:  modelData.isLastFocused?sysPallete.highlight:sysPallete.text
+						onTextChanged: {
+							if(activeFocus)
+								cursorVisible=true
+						}
+						Keys.onUpPressed: {
+							rootWindow.moveFocusedTaskUp()
+						}
+						Keys.onDownPressed: {
+							rootWindow.moveFocusedTaskDown()
+						}
+						Keys.onTabPressed: {
+							rootWindow.demoteFocusedTask()
+						}
+						Keys.onBacktabPressed: {
+							rootWindow.promoteFocusedTask()
+						}
+						Keys.onReturnPressed: {
+							text=text.trim()
+							cursorVisible=false
+							editingFinished()
+							focused=false
+						}
 						onEditingFinished: {
 							modelData.name = text
+							modelData.requestFocus()
 						}
 					}
 				}
@@ -109,8 +151,6 @@ ListView {
 					} else {
 						subTasks = []
 					}
-
-//					focus = true
 				}
 			}
 
@@ -119,19 +159,20 @@ ListView {
 				x: 10
 				width: parent.width - x
 				id: commentRow
-				Text {
-					id: commentStrip
-					text: ("%1").arg(modelData.comment)
-					visible: modelData.comment!=="" || modelData.subtaskCount !==0
-					color: Material.foreground
-					wrapMode: Text.Wrap
-				}
 				Text{
 					id: doneCounter
 					text: ("[%1/%2]").arg(modelData.doneSubtaskCount).arg(modelData.subtaskCount)
 					visible: modelData.subtaskCount > 0
 					color:  Material.foreground
 				}
+				TextEdit {
+					id: commentStrip
+					text: ("%1").arg(modelData.comment)
+					visible: modelData.comment!==""
+					color: Material.foreground
+					wrapMode: Text.Wrap
+				}
+
 			}
 			ListView {
 				x: 10

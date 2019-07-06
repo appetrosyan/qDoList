@@ -96,6 +96,7 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 	connect(window, SIGNAL(moveFocusedTaskDown()), this, SLOT(moveCurrentlyFocusedTaskDown()));
 	connect(window, SIGNAL(demoteFocusedTask()), this, SLOT(demoteCurrentlyFocusedTask()));
 	connect(window, SIGNAL(promoteFocusedTask()), this, SLOT(promoteCurrentlyFocusedTask()));
+	connect(window, SIGNAL(toggleFocusedTask()), this, SLOT(toggleFocusedTask()));
 	auto* doc = childObject<QQuickTextDocument*>(engine, "textEditor", "textDocument");
 	auto* parser = new NaturalLanguageHighlighter(doc->textDocument());
 	Q_UNUSED(parser);
@@ -134,6 +135,12 @@ void QMLSignalHandler::promoteCurrentlyFocusedTask()
 {
 	lastFocusedGuard();
 	Task::lastFocusedTask->promote();
+}
+
+void QMLSignalHandler::toggleFocusedTask()
+{
+	lastFocusedGuard();
+	Task::lastFocusedTask->toggle();
 }
 
 

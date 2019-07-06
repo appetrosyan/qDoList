@@ -49,4 +49,5 @@ public slots:
 	void moveCurrentlyFocusedTaskDown();
 	void demoteCurrentlyFocusedTask();
 	void promoteCurrentlyFocusedTask();
+	void toggleFocusedTask();
 };

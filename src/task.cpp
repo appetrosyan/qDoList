@@ -65,7 +65,7 @@ Task& Task::setSuperModel(TaskListModel* superModel)
 }
 
 
-Task &Task::toggle() {
+bool Task::toggle() {
 	if(this->isEverySubtaskDone()){
 		if(m_done){
 			m_done = false;
@@ -78,8 +78,9 @@ Task &Task::toggle() {
 		}
 		emit doneChanged();
 		emit overDueChanged();
+		return true;
 	}
-	return *this;
+	return false;
 }
 
 void Task::goAway()
@@ -261,6 +262,7 @@ QJsonObject Task::toJson() const
 	QJsonObject retVal;
 	retVal["text"] = m_text;
 	retVal["done"] = m_done;
+	retVal["comment"] = m_comment;
 	auto f = [] (QDateTime t) {return t.toString(fmt);};
 	retVal["added"] = f(m_added);
 	retVal["scheduled"] = f(m_scheduled);
@@ -277,6 +279,7 @@ QJsonObject Task::toJson() const
 Task &Task::updateFromJson(QJsonObject json)
 {
 	m_text = json.contains("text") && json["text"].isString() ? json["text"].toString():"";
+	m_comment = json.contains("comment") && json["comment"].isString() ? json["comment"].toString():"";
 	m_done = json.contains("done") && json["done"].isBool() && json["done"].toBool();
 	auto f = [json] (std::string v) {
 		QString verb = QString::fromStdString(v);
