@@ -1,3 +1,4 @@
+# Maintainer: Aleksandr Petrosyan a-p-petrosyan@yandex.ru 
 _realname="qDoList"
 pkgname="${_realname,,}"	# viva Bash 4.0
 url="https://github.com/appetrosyan/qDoList"
