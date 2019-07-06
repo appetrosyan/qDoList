@@ -54,12 +54,8 @@ ListView {
 		Rectangle {
 			width: parent.width
 			height: childrenRect.height
-			color: Qt.darker(sysPallete.window, 1+modelData.doneSubtaskCount/10)
+			color: Qt.lighter(sysPallete.window, 1+modelData.doneSubtaskCount/10)
 			radius: 15
-
-//			InfoRow {
-//				id: infoRow
-			//			}
 			Kirigami.SwipeListItem {
 				property bool expanded:false
 				property var subTasks

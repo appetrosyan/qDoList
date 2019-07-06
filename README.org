@@ -6,11 +6,13 @@ A holiday project of a physicist, trying not to forget how to write programs in 
 The code quality leaves much to be desired, and most of what I did has a hacky feel to it. However the program is thoroughly tested, so it could be used as a daily driver. 
 
 It's a todo list manager. When it's in a finished (post-alpha) state, I expect it to be the same thing to Todoist, as KeepassX is to LastPass.
-
+* List of Features
  - [X] TODO tasks that can be toggled by swiping left to right. 
- - [ ] Tasks can be moved
-   - [ ] up and down within the same model
-   - [ ] promoted and de-moted across models
+ - [X] Tasks can be moved
+   - [X] up and down within the same model
+   - [X] promoted and de-moted across models
+   - [X] This is accomplished using the keyboard
+   - [X] Or the convenient dragHandles provided on the left
  - [X] Multiple todo lists can be, [5/5]
    - [X] loaded
    - [X] Saved
@@ -20,6 +22,7 @@ It's a todo list manager. When it's in a finished (post-alpha) state, I expect i
  - [-] Todo lists are stored in [1/7]
    - [X] Plain text Json
    - [ ] Binary Json
+     - [ ] It turned out that this format offered little advantage over human Readable JSON, and definitely worse than ORG. 
    - [-] Org mode (ther's some rudimentary Org support, but there are far too many formats to keep track of)
    - [-] Stripped out of C-like comments
      - [X] They can be loaded,
@@ -40,7 +43,6 @@ It's a todo list manager. When it's in a finished (post-alpha) state, I expect i
      - [X] if a date is specified in a plaintext form e.g. 3/20, it's first assumed to be month/day/year and only then the other way around. 
      - [X] In English
      - [-] In Russian (the translations are there but don't load)
-     - [ ] TODO get feature requests. 
    - [X] Additional subtasks can be added by putting them inside curly braces and splitting with commas.
    - [X] Same can be done by putting comma separated subtasks after a 
    - [X] a "+" asks the manager to find the closest match from all open tasks.
@@ -124,7 +126,8 @@ What I've found is the following: QML compares negatively to every one of them.
 - It has no identity of its own.
 - The C++ debugging tools are useless.
 - There are no QML debugging tools.
-- 
+  - Since it's an interpreted language, most errors require a recompile to be found.
+  - Since it's in early adoption, 
 
 
 
