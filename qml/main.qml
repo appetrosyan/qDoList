@@ -65,9 +65,9 @@ Kirigami.ApplicationWindow {
 				}
 			},
 			Kirigami.Action{
-				text: qsTr("&Save as")
-				iconName: "document-save-as"
-				shortcut: StandardKey.SaveAs
+				text: qsTr("&New")
+				iconName: "document-new"
+				shortcut: StandardKey.New
 				onTriggered: {
 					loadTodoListDialog.write = true
 					loadTodoListDialog.selectExisting = false

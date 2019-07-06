@@ -40,8 +40,10 @@ QString TrackedFile::fileName(){return m_url.fileName();}
 
 void TrackedFile::setModified(bool newModified)
 {
-	m_modified=newModified;
-	emit modifiedChanged();
+	if(m_modified!=newModified){
+		m_modified=newModified;
+		emit modifiedChanged();
+	}
 }
 
 bool TrackedFile::isBinary(){
@@ -52,6 +54,7 @@ void TrackedFile::setBinary(bool newBinary){
 	if(m_isBinary!=newBinary){
 		m_isBinary=newBinary;
 		emit binaryChanged();
+		setModified(true);
 	}
 }
 

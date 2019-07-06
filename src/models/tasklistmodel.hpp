@@ -8,7 +8,7 @@ class TaskListModel : public List
 {
 	Q_OBJECT
 	Q_PROPERTY(int completeTasks READ incompleteTasks NOTIFY changesMade)
-	Q_PROPERTY(int totalTasks READ totalTasks  NOTIFY changesMade)
+	Q_PROPERTY(int totalTasks READ totalTasks NOTIFY changesMade)
 public:
 	TaskListModel(QObject* parent);
 	bool changesToSync();

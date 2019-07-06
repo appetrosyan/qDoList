@@ -16,17 +16,18 @@ Frame {
 		wrap: true
 		smooth: true
 		delegate: Row{
-//			opacity: model.index - fileFromTumbler.currentIndex
 			CheckBox{
 				id: check
 				checkable: false
-				checked: model.modelData.isBinary
+				checked: modelData.isBinary
+				onClicked: {
+					modelData.isBinary = !modelData.isBinary
+				}
 			}
 			Label {
 				id: fileFromTumbler
 				text: model.modelData.fileName + (model.modelData.isModified?"*":"")
 				color: model.modelData.isBinary?"cyan":sysPallete.text
-//				opacity: Tumbler.currentIndex/10
 				horizontalAlignment: Text.AlignHCenter
 				verticalAlignment: Text.AlignVCenter
 			}
