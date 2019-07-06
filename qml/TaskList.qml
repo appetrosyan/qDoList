@@ -66,6 +66,50 @@ ListView {
 				id:infoRow
 				height: 50
 				Row{
+					anchors.verticalCenter: infoRow.verticalCenter
+					Kirigami.Icon{
+						id: dragHandle
+						source: "handle-sort"
+						width: 24
+						height: 24
+						MouseArea{
+							anchors.fill: parent
+							cursorShape:Qt.OpenHandCursor
+							property bool held: false
+							property var startx: 0
+							property var starty: 0
+//							hoverEnabled: true
+							onPressed: {
+								held = true
+								startx = mouseX
+								starty = mouseY
+							}
+							onReleased: {
+								held=false
+							}
+							onHeldChanged: {
+								cursorShape=(held?Qt.OpenHandCursor:Qt.ClosedHandCursor)
+							}
+							onExited: {
+								held=false
+							}
+							onPositionChanged: {
+								if(mouseY - 10 >starty && held){
+									modelData.moveDown()
+									held = false
+								}else if (mouseY + 10 < starty && held){
+									modelData.moveUp()
+									held = false
+								} else if (mouseX - 10 > startx){
+									modelData.demote()
+									held = false
+								} else if (mouseX +10 < startx){
+									modelData.promote()
+									held=false
+								}
+							}
+						}
+					}
 					QQC2.CheckBox{
 						id: check
 						checkState: !modelData.done?
@@ -80,14 +124,12 @@ ListView {
 						SequentialAnimation on x{
 							id: shake
 							NumberAnimation {
-								from: 0
-								to: 10
+								to: 40
 								duration: 80
 								easing.type: Easing.InOutBounce
 							}
 							NumberAnimation{
-								from: 10
-								to: 0
+								to: 24
 								duration: 150
 								easing.type: Easing.InOutBounce
 							}
@@ -142,14 +184,15 @@ ListView {
 				]
 
 				onPressAndHold: {
-					modelData.goAway()
+					popup.visible=true
 				}
 				onDoubleClicked: {
 					modelData.promote()
 				}
 				subTasks: model.modelData.hasChildren?model.modelData.subModel:[]
-				onClicked: {
+				onPressed: {
 					expanded = !expanded
+
 					model.modelData.requestFocus()
 				}
 
@@ -181,7 +224,6 @@ ListView {
 					color: Material.foreground
 					wrapMode: Text.Wrap
 				}
-
 			}
 			ListView {
 				x: 10
@@ -222,6 +264,39 @@ ListView {
 					}
 				}
 			}
+			QQC2.Popup{
+				id: popup
+				z:10
+				Column{
+					QQC2.Label{
+						text: qsTr("move: %1").arg(modelData.name)
+					}
+
+					QQC2.Button{
+						text: "up"
+						anchors.horizontalCenter: parent.horizontalCenter
+						onPressed: {
+							rootWindow.moveFocusedTaskUp()
+						}
+					}
+					Row{
+						QQC2.Button{
+							text:"out"
+						}
+						QQC2.Button{
+							text: "in"
+						}
+					}
+					QQC2.Button{
+						anchors.horizontalCenter: parent.horizontalCenter
+						text: "down"
+						onPressed: {
+							rootWindow.moveFocusedTaskDown()
+						}
+					}
+				}
+
+			}
 		}
 	}
 
@@ -237,7 +312,7 @@ ListView {
 		Rectangle {
 			width: listView.width
 			height: childrenRect.height
-			color: Material.accent
+			color: sysPallete.highlight
 			Text {
 				text: section
 				color: sysPallete.highlightedText
