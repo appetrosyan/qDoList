@@ -80,18 +80,11 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 	window = qobject_cast<QQuickWindow *>(engine.rootObjects().value(0));
 	populateModel();
 	connect(window, SIGNAL(sendMessage(QString)), this, SLOT(handleMessage(QString)));
-	connect(window, SIGNAL(deleteAt(int)), this, SLOT(removeAt(int)));
+//	connect(window, SIGNAL(deleteAt(int)), this, SLOT(removeAt(int)));
 	connect(window, SIGNAL(writeToFile(QString)), this, SLOT(saveModelToFile(QString)));
 	connect(window, SIGNAL(loadFromFile(QString)), this, SLOT(loadModelFromFile(QString)));
 	connect(window, SIGNAL(saveAllFiles()), this, SLOT(syncAllFiles()));
-	connect(window, SIGNAL(requestTaskList()), this, SLOT(void QMLSignalHandler::lastFocusedGuard()
-	{
-															  if(Task::lastFocusedTask==nullptr){
-																  qobject_cast<Task*>(taskList->_data.back())->requestFocus();
-															  }
-														  }
-
-														  printAllTasksToConsole()));
+	connect(window, SIGNAL(requestTaskList()), this, SLOT(printAllTasksToConsole()));
 	connect(window, SIGNAL(moveFocusedTaskUp()), this, SLOT(moveCurrentlyFocusedTaskUp()));
 	connect(window, SIGNAL(moveFocusedTaskDown()), this, SLOT(moveCurrentlyFocusedTaskDown()));
 	connect(window, SIGNAL(demoteFocusedTask()), this, SLOT(demoteCurrentlyFocusedTask()));
@@ -110,39 +103,44 @@ void QMLSignalHandler::resetContext()
 
 void QMLSignalHandler::lastFocusedGuard(){
 	if(Task::lastFocusedTask==nullptr){
-		qobject_cast<Task*> (taskList->_data.back())->requestFocus();
+		if(!taskList->isEmpty())
+			qobject_cast<Task*> (taskList->_data.back())->requestFocus();
 	}
 }
+
+#define LASTFOCUSED(Y) if(Task::lastFocusedTask!=nullptr){Task::lastFocusedTask->Y();}
+
 void QMLSignalHandler::moveCurrentlyFocusedTaskUp()
 {
 	lastFocusedGuard();
-	Task::lastFocusedTask->moveUp();
+	LASTFOCUSED(moveUp)
 }
 
 void QMLSignalHandler::moveCurrentlyFocusedTaskDown()
 {
 	lastFocusedGuard();
-	Task::lastFocusedTask->moveDown();
+	LASTFOCUSED(moveDown)
 }
 
 void QMLSignalHandler::demoteCurrentlyFocusedTask()
 {
 	lastFocusedGuard();
-	Task::lastFocusedTask->demote();
+	LASTFOCUSED(demote)
 }
 
 void QMLSignalHandler::promoteCurrentlyFocusedTask()
 {
 	lastFocusedGuard();
-	Task::lastFocusedTask->promote();
+	LASTFOCUSED(promote)
 }
 
 void QMLSignalHandler::toggleFocusedTask()
 {
 	lastFocusedGuard();
-	Task::lastFocusedTask->toggle();
+	LASTFOCUSED(toggle)
 }
 
+#undef LASTFOCUSED
 
 void QMLSignalHandler::handleMessage(QString msg)
 {

@@ -2,11 +2,7 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
-Frame {
-	wheelEnabled: true
-	hoverEnabled: true
-	focusPolicy: Qt.ClickFocus
-	height:150
+Item {
 	Tumbler {
 		z: 1
 		height: 100
@@ -15,23 +11,17 @@ Frame {
 		model: myFileList
 		wrap: true
 		smooth: true
-		delegate: Row{
-			CheckBox{
-				id: check
-				checkable: false
-				checked: modelData.isBinary
-				onClicked: {
-					modelData.isBinary = !modelData.isBinary
-				}
-			}
+		delegate: Component {
 			Label {
 				id: fileFromTumbler
 				text: model.modelData.fileName + (model.modelData.isModified?"*":"")
 				color: model.modelData.isBinary?"cyan":sysPallete.text
+				opacity: 1.0 - Math.abs(Tumbler.displacement) / (Tumbler.tumbler.visibleItemCount / 2)
 				horizontalAlignment: Text.AlignHCenter
 				verticalAlignment: Text.AlignVCenter
 			}
 		}
+
 		onCurrentIndexChanged: {
 //			myFileList.get(currentIndex).requestAttention()
 			// This is semantically correct, but horrendously inefficient.

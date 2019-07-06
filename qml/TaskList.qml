@@ -14,6 +14,7 @@ ListView {
 	property var thisDay
 	add: slideIn
 	remove: dropOut
+	removeDisplaced: smoothShuffle
 	moveDisplaced:smoothShuffle
 	move: smoothShuffle
 	Transition {
@@ -23,7 +24,7 @@ ListView {
 			properties: "x"
 			from: 100
 			duration: 400
-			easing.type: Easing.OutBounce
+			easing.type: Easing.OutExpo
 		}
 	}
 	Transition {
@@ -31,9 +32,9 @@ ListView {
 		NumberAnimation {
 			easing.amplitude: 1.05
 			properties: "x"
-			to: 300
-			duration: 400
-			easing.type: Easing.InExpo
+			to: listView.width
+			duration: 600
+			easing.type: Easing.OutExpo
 		}
 	}
 
@@ -42,8 +43,7 @@ ListView {
 		NumberAnimation{
 			properties: "y"
 			to: accordion.height
-			duration: 1000
-			easing.type: Easing.InOutCubic
+			easing.type: Easing.InOutCirc
 		}
 	}
 
@@ -68,7 +68,9 @@ ListView {
 				Row{
 					QQC2.CheckBox{
 						id: check
-						checkState: !modelData.done? (modelData.doneSubtaskCount >0 ? 1:0):2
+						checkState: !modelData.done?
+										(modelData.doneSubtaskCount >0 ? 1:0)
+									  :2
 						checkable: false
 						onClicked: {
 							if(!modelData.toggle()){
@@ -96,7 +98,9 @@ ListView {
 						id: nameEdit
 						text: modelData.name
 						visible: true
-						color:  modelData.isLastFocused?sysPallete.highlight:sysPallete.text
+						color:  modelData.isLastFocused?
+									sysPallete.highlight:
+									sysPallete.text
 						onTextChanged: {
 							if(activeFocus)
 								cursorVisible=true
@@ -143,14 +147,11 @@ ListView {
 				onDoubleClicked: {
 					modelData.promote()
 				}
+				subTasks: model.modelData.hasChildren?model.modelData.subModel:[]
 				onClicked: {
 					expanded = !expanded
 					model.modelData.requestFocus()
-					if (model.modelData.hasChildren) {
-						subTasks = model.modelData.subModel
-					} else {
-						subTasks = []
-					}
+
 				}
 			}
 
@@ -161,7 +162,9 @@ ListView {
 				id: commentRow
 				Text{
 					id: doneCounter
-					text: ("[%1/%2]").arg(modelData.doneSubtaskCount).arg(modelData.subtaskCount)
+					text: ("[%1/%2]")
+					.arg(modelData.doneSubtaskCount)
+					.arg(modelData.subtaskCount)
 					visible: modelData.subtaskCount > 0
 					color:  Material.foreground
 				}
@@ -196,6 +199,7 @@ ListView {
 				interactive: false
 				add: slideIn
 				remove: dropOut
+				removeDisplaced: smoothShuffle
 				moveDisplaced:smoothShuffle
 				move: smoothShuffle
 			}
@@ -241,7 +245,7 @@ ListView {
 		anchors.margins: 60
 		anchors.fill: parent
 		opacity: 0.5
-		visible: listView.count === 0
+		visible: myModel.totalTasks===0
 		horizontalAlignment: Qt.AlignHCenter
 		verticalAlignment: Qt.AlignVCenter
 		font.pixelSize: 18

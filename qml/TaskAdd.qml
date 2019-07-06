@@ -27,19 +27,27 @@ RowLayout {
 				newTask.text=newTask.focus?"":placeholder
 			}
 			Keys.onReturnPressed: {
-				editingFinished()
+				if(text!="")
+					editingFinished()
+				else{
+					rootWindow.toggleFocusedTask()
+				}
 			}
 			Keys.onUpPressed: {
-				rootWindow.moveFocusedTaskUp()
+				if(!placeholder.visible)
+					rootWindow.moveFocusedTaskUp()
 			}
 			Keys.onDownPressed: {
-				rootWindow.moveFocusedTaskDown()
+				if(!placeholder.visible)
+					rootWindow.moveFocusedTaskDown()
 			}
 			Keys.onTabPressed: {
-				rootWindow.demoteFocusedTask()
+				if(!placeholder.visible)
+					rootWindow.demoteFocusedTask()
 			}
 			Keys.onBacktabPressed: {
-				rootWindow.promoteFocusedTask()
+				if(!placeholder.visible)
+					rootWindow.promoteFocusedTask()
 			}
 
 //			Keys.forwardTo: [rootWindow]

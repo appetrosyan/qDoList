@@ -23,8 +23,6 @@ Kirigami.ApplicationWindow {
 	visible: true
 	signal addTask
 	signal sendMessage(string msg)
-	signal sendIndex(int x)
-	signal deleteAt(int x)
 	signal updateDue(int x, string newDue)
 	signal writeToFile(string file)
 	signal loadFromFile(string file)
@@ -44,7 +42,7 @@ Kirigami.ApplicationWindow {
 	globalDrawer: Kirigami.GlobalDrawer{
 		id:globalDrawer
 		showContentWhenCollapsed: true
-		title: i18n("QDoList")
+		title: qsTr("QDoList")
 		visible: !handleVisible
 		handle.anchors.top: rootWindow.top
 		handleVisible: rootWindow.width<600
@@ -89,15 +87,22 @@ Kirigami.ApplicationWindow {
 					toggleFocusedTask()
 				}
 			}
-
 		]
-		FilePicker{
-			id: filePicker
-			Layout.preferredWidth: 250
-			Layout.fillHeight: false
-			Layout.fillWidth: false
-			width: 120
-			height: 120
+		ToolSeparator{}
+		Rectangle{
+			width:globalDrawer.width-10
+			height: childrenRect.height
+			color: "#00ffffff"
+			border.color: sysPallete.text
+			radius: 12
+			FilePicker{
+				id: filePicker
+				width: globalDrawer.width-12
+				height: 160
+				Layout.preferredWidth: 250
+				Layout.fillHeight: false
+				Layout.fillWidth: false
+			}
 		}
 		Switch{
 			text: qsTr("Auto Sync Files")
@@ -159,7 +164,7 @@ Kirigami.ApplicationWindow {
 		width: rootWindow.width
 		height: addTask.height - 5
 		radius: 15
-		border.color: sysPallete.highlight
+		border.color: Qt.tint(sysPallete.base, sysPallete.highlight)
 		border.width: 1
 		TaskAdd {
 			id: addTask
@@ -169,7 +174,8 @@ Kirigami.ApplicationWindow {
 
 	FileDialog {
 		id: loadTodoListDialog
-		title: qsTr("Choose your to-do list %1").arg(write?"to write":"to read")
+		title: qsTr("Choose your to-do list %1")
+		.arg(write?qsTr("to write"):qsTr("to read"))
 		folder: shortcuts.home
 		property bool write: false
 		onAccepted: {
