@@ -49,13 +49,21 @@ ListView {
 				property bool expanded:false
 				property var subTasks
 				id:infoRow
-				height: 32
-				RowLayout{
+				height: 50
+				Row{
+					QQC2.CheckBox{
+						id: check
+						checkState: !modelData.done? (modelData.doneSubtaskCount >0 ? 1:0):2
+						onCheckedChanged: {
+							model.modelData.toggle()
+						}
+					}
 
-					QQC2.TextField {
+					TextEdit{
 						id: nameEdit
 						text: modelData.name
 						visible: true
+						color:  sysPallete.text
 						onEditingFinished: {
 							modelData.name = text
 						}
