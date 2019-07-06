@@ -151,7 +151,10 @@ ListView {
 				onClicked: {
 					expanded = !expanded
 					model.modelData.requestFocus()
+				}
 
+				Component.onCompleted: {
+					expanded = model.modelData.hasChildren
 				}
 			}
 
@@ -167,6 +170,9 @@ ListView {
 					.arg(modelData.subtaskCount)
 					visible: modelData.subtaskCount > 0
 					color:  Material.foreground
+					onVisibleChanged: {
+						infoRow.expanded=true
+					}
 				}
 				TextEdit {
 					id: commentStrip
