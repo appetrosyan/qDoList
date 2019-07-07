@@ -37,6 +37,7 @@ Kirigami.ApplicationWindow {
 		id: sysPallete
 	}
 
+
 	Material.accent: sysPallete.highlight
 	Material.theme: settings.darkMode?Material.Dark:Material.light
 	globalDrawer: Kirigami.GlobalDrawer{
@@ -47,7 +48,7 @@ Kirigami.ApplicationWindow {
 		handle.anchors.top: rootWindow.top
 		handleVisible: rootWindow.width<600
 		//		collapsible: !handleVisible
-		//		collapsed: !handleVisible\
+		//		collapsed: !handleVisible
 		// The file Picker doens't look particularly good.
 		modal: handleVisible
 		actions: [
@@ -78,13 +79,6 @@ Kirigami.ApplicationWindow {
 				shortcut: StandardKey.Save
 				onTriggered: {
 					saveAllFiles()
-				}
-			},
-			Kirigami.Action{
-				text: qsTr("Toggle Active Task")
-				shortcut: StandardKey.AddTab
-				onTriggered: {
-					toggleFocusedTask()
 				}
 			}
 		]
@@ -174,7 +168,7 @@ Kirigami.ApplicationWindow {
 
 	FileDialog {
 		id: loadTodoListDialog
-		title: qsTr("Choose your to-do list %1")
+		title: qsTr("Choose a local To-Do list file %1")
 		.arg(write?qsTr("to write"):qsTr("to read"))
 		folder: shortcuts.home
 		property bool write: false

@@ -19,12 +19,12 @@ It's a todo list manager. When it's in a finished (post-alpha) state, I expect i
    - [X] Automatically synced to disk
    - [X] And re-loaded when a file changes on disk
    - [X] Viewed from a nice sidebar that goes away for small windows.
- - [-] Todo lists are stored in [1/7]
+ - [-] Todo lists are stored in [2/7]
    - [X] Plain text Json
-   - [ ] Binary Json
-     - [ ] It turned out that this format offered little advantage over human Readable JSON, and definitely worse than ORG. 
+   - [X] Binary Json
+     - [X] It turned out that this format offered little advantage over human Readable JSON, and definitely worse than ORG. 
    - [-] Org mode (ther's some rudimentary Org support, but there are far too many formats to keep track of)
-   - [-] Stripped out of C-like comments
+   - [-] Stripped out of C-like comments [1/3]
      - [X] They can be loaded,
      - [ ] Tracked
      - [ ] And synced back.
