@@ -61,8 +61,8 @@ SOURCES       = src/main.cpp \
 		src/qmlsignalhandler.cpp \
 		src/qquicksettinginterface.cpp \
 		src/models/tasklistmodel.cpp \
-		src/trackedfile.cpp rcc/qrc_todolist.cpp \
-		rcc/qrc_translations.cpp \
+		src/trackedfile.cpp build/rcc/qrc_todolist.cpp \
+		build/rcc/qrc_translations.cpp \
 		build/moc/moc_task.cpp \
 		build/moc/moc_filelistmodel.cpp \
 		build/moc/moc_listmodel.cpp \
@@ -870,29 +870,29 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all: rcc/qrc_todolist.cpp rcc/qrc_translations.cpp
+compiler_rcc_make_all: build/rcc/qrc_todolist.cpp build/rcc/qrc_translations.cpp
 compiler_rcc_clean:
-	-$(DEL_FILE) rcc/qrc_todolist.cpp rcc/qrc_translations.cpp
-rcc/qrc_todolist.cpp: todolist.qrc \
+	-$(DEL_FILE) build/rcc/qrc_todolist.cpp build/rcc/qrc_translations.cpp
+build/rcc/qrc_todolist.cpp: todolist.qrc \
 		/usr/bin/rcc \
-		Icons/fontello.ttf \
-		Icons/qDo.png \
-		Icons/qDo.svg \
-		qml/TaskAdd.qml \
-		qml/DatePicker.qml \
-		qml/dateFunctions.js \
-		qml/InfoRow.qml \
-		qml/TaskEdit.qml \
-		qml/FilePicker.qml \
-		qml/main.qml \
-		qml/TaskList.qml \
-		Icons/move.svg
-	/usr/bin/rcc -name todolist todolist.qrc -o rcc/qrc_todolist.cpp
+		src/Icons/fontello.ttf \
+		src/Icons/qDo.png \
+		src/Icons/qDo.svg \
+		src/qml/TaskAdd.qml \
+		src/qml/DatePicker.qml \
+		src/qml/dateFunctions.js \
+		src/qml/InfoRow.qml \
+		src/qml/TaskEdit.qml \
+		src/qml/FilePicker.qml \
+		src/qml/main.qml \
+		src/qml/TaskList.qml \
+		src/Icons/move.svg
+	/usr/bin/rcc -name todolist todolist.qrc -o build/rcc/qrc_todolist.cpp
 
-rcc/qrc_translations.cpp: translations.qrc \
+build/rcc/qrc_translations.cpp: translations.qrc \
 		/usr/bin/rcc \
-		translations/qdolist_ru.qm
-	/usr/bin/rcc -name translations translations.qrc -o rcc/qrc_translations.cpp
+		src/translations/qdolist_ru.qm
+	/usr/bin/rcc -name translations translations.qrc -o build/rcc/qrc_translations.cpp
 
 compiler_moc_predefs_make_all: build/moc/moc_predefs.h
 compiler_moc_predefs_clean:
@@ -1021,11 +1021,11 @@ build/obj/trackedfile.o: src/trackedfile.cpp src/trackedfile.hpp \
 		src/task.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/obj/trackedfile.o src/trackedfile.cpp
 
-build/obj/qrc_todolist.o: rcc/qrc_todolist.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/obj/qrc_todolist.o rcc/qrc_todolist.cpp
+build/obj/qrc_todolist.o: build/rcc/qrc_todolist.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/obj/qrc_todolist.o build/rcc/qrc_todolist.cpp
 
-build/obj/qrc_translations.o: rcc/qrc_translations.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/obj/qrc_translations.o rcc/qrc_translations.cpp
+build/obj/qrc_translations.o: build/rcc/qrc_translations.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/obj/qrc_translations.o build/rcc/qrc_translations.cpp
 
 build/obj/moc_task.o: build/moc/moc_task.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build/obj/moc_task.o build/moc/moc_task.cpp

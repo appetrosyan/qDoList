@@ -6,13 +6,13 @@
         <file>src/qml/TaskAdd.qml</file>
         <file>src/qml/TaskEdit.qml</file>
         <file>src/qml/TaskList.qml</file>
-        <file alias="fontello.ttf">Icons/fontello.ttf</file>
-        <file alias="qDo.svg">Icons/qDo.svg</file>
-        <file alias="qDo.png">Icons/qDo.png</file>
+        <file alias="fontello.ttf">src/Icons/fontello.ttf</file>
+        <file alias="qDo.svg">src/Icons/qDo.svg</file>
+        <file alias="qDo.png">src/Icons/qDo.png</file>
         <file>src/qml/InfoRow.qml</file>
         <file>src/qml/dateFunctions.js</file>
     </qresource>
     <qresource prefix="/Images">
-        <file>Icons/move.svg</file>
+        <file>src/Icons/move.svg</file>
     </qresource>
 </RCC>

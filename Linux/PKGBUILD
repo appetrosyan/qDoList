@@ -23,7 +23,11 @@ prepare() {
 
 build() {
   cd "$srcdir/$_realname"
-  qmake $_realname.pro 
+  qmake-qt5 "$_realname.pro"\
+	    PREFIX=/usr \
+	    QMAKE_CFLAGS="${CFLAGS}"\
+	    QMAKE_CXXFLAGS="${FXXFLAGS}"\
+	    QMAKE_LFLAGS="${LDFLAGS}"
   make 
 }
 

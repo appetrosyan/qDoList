@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<RCC>
-    <qresource prefix="/">
-        <file alias="fontello.ttf">Icons/fontello.ttf</file>
-    </qresource>
-    <qresource prefix="/Images">
-        <file alias="Icons/move.svg">Icons/move.svg</file>
-    </qresource>
-</RCC>

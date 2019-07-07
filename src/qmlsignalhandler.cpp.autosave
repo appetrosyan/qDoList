@@ -69,7 +69,7 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 	engine.rootContext()->setContextProperty("settings", m_settingsInterface);
 
 	qInfo() << "Hello world ";
-	const QUrl url(QStringLiteral("qrc:/src/qml/main.qml"));
+	const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
 	auto f = [url](QObject *obj, const QUrl &objUrl)
 	{
 		if (!obj && url == objUrl)

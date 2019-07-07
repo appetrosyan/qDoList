@@ -10,7 +10,7 @@ CONFIG+=C++14
 TRANSLATIONS = translations/qdolist_ru.ts
 MOC_DIR = build/moc
 OBJECTS_DIR = build/obj
-RCC_DIR = rcc
+RCC_DIR = build/rcc
 
 # The following define makes your compiler warn you if you use any
 # feature of Qt which has been marked as deprecated (the exact warnings
