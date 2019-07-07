@@ -8,8 +8,8 @@ TARGET = qDoList
 INCLUDEPATH += .
 CONFIG+=C++14
 TRANSLATIONS = translations/qdolist_ru.ts
-MOC_DIR = moc
-OBJECTS_DIR = obj
+MOC_DIR = build/moc
+OBJECTS_DIR = build/obj
 RCC_DIR = rcc
 
 # The following define makes your compiler warn you if you use any
