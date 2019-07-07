@@ -43,6 +43,7 @@ Column {
 		TextField {
 			id: newName
 			text: model.modelData.name
+			placeholderText: "Task definition"
 			Layout.fillWidth: true
 			onAccepted: {
 				model.modelData.name = text
@@ -60,12 +61,16 @@ Column {
 		TextField{
 			id: newComment
 			text: model.modelData.comment
+			placeholderText: "Task comment..."
 			Layout.fillWidth: true
 			onAccepted: {
 				model.modelData.comment = text
 				editsFinished()
 			}
 		}
+	}
+	ButtonGroup{
+		id: btnGrp
 	}
 
 	RowLayout {
@@ -88,13 +93,17 @@ Column {
 		anchors.left: parent.left
 		Label {
 			text: qsTr("Scheduled")
+			Layout.alignment: Qt.AlignLeft
 			padding: 12
+			color: "cyan"
+
 		}
 		DatePicker {
+			id: scheduledButton
 			currentYear: DF.currentYear()
 			date: model.modelData.scheduled
-			color: "cyan"
 			Layout.alignment: Qt.AlignRight
+			ButtonGroup.group: btnGrp
 			padding: 12
 			onNewDate: {
 				reSchedule(new Date(msg))
@@ -107,12 +116,14 @@ Column {
 		Label {
 			text: qsTr("Due")
 			padding: 12
+			color: "red"
 		}
 		DatePicker {
+			id: dueButton
 			date: model.modelData.due
 			currentYear: DF.currentYear()
 			padding: 12
-			color: "red"
+			ButtonGroup.group: btnGrp
 			Layout.alignment: Qt.AlignRight
 			onNewDate: {
 				reDue(new Date(msg))
@@ -120,44 +131,81 @@ Column {
 		}
 	}
 
+	property int yearOffset:0
+	property int monthOffset:0
 	ColumnLayout {
+		RowLayout{
+			Layout.fillWidth: true
+			Button{
+				Layout.preferredWidth: 40
+				text: "<"
+				onClicked: {
+					if((DF.currentMonth() + monthOffset)==0){
+						monthOffset=12 - DF.currentMonth()
+						yearOffset--
+					}else{
+						monthOffset--
+					}
+
+
+				}
+			}
+			Label{
+				Layout.fillWidth: true
+				Layout.alignment: Qt.AlignHCenter
+				text: (Qt.locale().monthName(DF.currentMonth()+monthOffset)) +(yearOffset===0?"":DF.currentYear()+yearOffset)
+			}
+
+			Button{
+				text: ">"
+				Layout.preferredWidth: 40
+				onClicked: {
+					if((DF.currentMonth() + monthOffset)==11){
+						monthOffset=0 - DF.currentMonth()
+						yearOffset++
+					}else {
+						monthOffset++
+					}
+				}
+			}
+		}
+
 		DayOfWeekRow {
 			locale: grid.locale
 			Layout.fillWidth: true
 			delegate: Text{
 				horizontalAlignment: Text.AlignHCenter
 				verticalAlignment: Text.AlignVCenter
-				//                opacity: model.month === Date.now().month ? 1 : 0.5
 				text: model.narrowName
+				font.pixelSize: 10
 				color: Material.foreground
 			}
 		}
 		MonthGrid {
 			id: grid
-			year: DF.currentYear()
-			month: DF.currentMonth()
+			year: DF.currentYear() + yearOffset
+			month: (DF.currentMonth()+monthOffset)
+			Layout.fillWidth: true
 			property bool updateDue: false
 			onClicked: {
-				if(updateDue){
-					// Long press and release
-					reSchedule(date)
-					updateDue = false
-				} else {
+				if(dueButton.checked){
 					reDue(date)
-
+				}else {
+					reSchedule(date)
 				}
 			}
-			onPressAndHold:  {
-				updateDue=true
-			}
-
 			delegate: Text{
 				horizontalAlignment: Text.AlignHCenter
 				verticalAlignment: Text.AlignVCenter
-				opacity: (model.month === DF.currentMonth() ) ? (model.day === DF.currentDay()?1:0.5) : 0.1
+				opacity: (model.month === (DF.currentMonth()+monthOffset) && model.year ===(DF.currentYear()+yearOffset)) ? 1 : 0.1
 				text: model.day
 				font.pointSize: 14
-				color: (model.day===Number(Qt.formatDate(due,"dd")) ) ?"red":(model.day===Number(Qt.formatDate(scheduled, "dd"))?"cyan":Material.foreground)
+				color:
+					(model.day===Number(Qt.formatDate(due,"dd")) && model.month ===DF.currentMonth()) ?
+						"red"
+					  :(model.day===Number(Qt.formatDate(scheduled, "dd")) && model.month ===DF.currentMonth()?
+							"cyan":
+							Material.foreground)
 			}
 		}
 	}

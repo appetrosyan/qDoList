@@ -22,7 +22,6 @@ Item {
 			}
 		}
 
-
 		onCurrentIndexChanged: {
 //			myFileList.get(currentIndex).requestAttention()
 			// This is semantically correct, but horrendously inefficient.

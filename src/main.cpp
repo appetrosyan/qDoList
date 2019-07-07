@@ -15,13 +15,12 @@
 #include <QMenu>
 #include <QQuickStyle>
 #include <QLoggingCategory>
-#include <iostream>
 
 
 
 int main(int argc, char ** argv)
 {
-		QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+	QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QApplication app(argc, argv);
 	QApplication::setWindowIcon(QIcon(":qDo.svg"));

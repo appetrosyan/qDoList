@@ -62,7 +62,7 @@ ListView {
 				id:infoRow
 				height: 50
 				Row{
-					anchors.verticalCenter: infoRow.verticalCenter
+					anchors.verticalCenter: parent.verticalCenter
 					Kirigami.Icon{
 						id: dragHandle
 						source: "handle-sort"
