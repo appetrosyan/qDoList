@@ -1,6 +1,7 @@
 *.o
 */moc_*
 qDoList
-rcc/*
-build/*
-obj/*
+*rcc/*
+*build/*
+*obj/*
+MAKEFILE
