@@ -78,7 +78,7 @@ e.g.
 
 #+begin_src bash
 yay -S qdolist
-#end_src
+#+end_src
 
 * License. 
 
