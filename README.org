@@ -1,13 +1,13 @@
 #+TITLE: qDoList a QML based todo-list manager. 
 * What this is
 
-A holiday project of a physicist, trying not to forget how to write programs in C++. 
+A holiday project of a *physicist*, trying not to forget how to write programs in C++. 
 
 The code quality leaves much to be desired, and most of what I did has a hacky feel to it. However the program is thoroughly tested, so it could be used as a daily driver. 
 
 It's a todo list manager. When it's in a finished (post-alpha) state, I expect it to be the same thing to Todoist, as KeepassX is to LastPass.
 * List of Features
- - [X] TODO tasks that can be toggled by swiping left to right. 
+ - [ ]  tasks that can be toggled by swiping left to right. (this used to be a feature, but then I discovered that 
  - [X] Tasks can be moved
    - [X] up and down within the same model
    - [X] promoted and de-moted across models
@@ -23,7 +23,7 @@ It's a todo list manager. When it's in a finished (post-alpha) state, I expect i
    - [X] Plain text Json
    - [X] Binary Json
      - [X] It turned out that this format offered little advantage over human Readable JSON, and definitely worse than ORG. 
-   - [-] Org mode (ther's some rudimentary Org support, but there are far too many formats to keep track of)
+   - [ ] Org mode.
    - [-] Stripped out of C-like comments [1/3]
      - [X] They can be loaded,
      - [ ] Tracked
@@ -48,9 +48,9 @@ It's a todo list manager. When it's in a finished (post-alpha) state, I expect i
    - [X] a "+" asks the manager to find the closest match from all open tasks.
      - [X] if there's a unique match at the top level the task is marked. 
  - [X] The recently opened files are saved persistently across sessions
-* TODO Install
+* Install
 ** From source
-Disclaimer, This is not recommended, and is not the way you should be installing the program in general. 
+Disclaimer, This is not recommended, and is not the way you should be installing the program in general. But this is a holiday project to build a portfolio, and compiles relatively quickly, so go right ahead. 
 
 I intend to create appropriate packages, but they're not ready at this stage. 
 
@@ -71,6 +71,10 @@ The PKGBUILD is provided in the repository, so
 #+begin_src bash
 makepkg -si
 #+end_src
+
+*** Known non-feature. 
+
+I still haven't designed an icon, and the .desktop file simply doesn't exist. I'm working on it. 
 *** AUR 
 Install using an AUR helper of your choosing (yay, aura etc.)
 
@@ -79,6 +83,15 @@ e.g.
 #+begin_src bash
 yay -S qdolist
 #+end_src
+
+** On Mac OS X. 
+
+As of now, Mac OS X is not supported. Partly because I'm stupid and I can't figure out how to build Kirigami on Mac OS X (which also kind of means that I should be using it staticlally linked, which I can't really do either). An earlier build (which used pure QML), is still available, but you'd have to do some Git Trickery to get at it. 
+
+** On Windows. 
+
+Should be possible to build, but you're on your own with that. 
+
 
 * License. 
 
@@ -110,7 +123,7 @@ What I've found is the following: QML compares negatively to every one of them.
 - C++ interfacing is ... it's shit.
   - Widgets were directly accessible without any translations, and can be put together from .ui files.
   - Every C++ type had simple and understandable semantics, the interface was purely declarative, while the backend handled *all* of the logic.
-  - SIgnals sent from UI elements were the ONLY and non-redundant way of interfacing with C++.
+  - Signals sent from UI elements were the ONLY and non-redundant way of interfacing with C++.
 - Front-Back communication is redundant and inefficient.
   - Sending a signal from QML. It's slow, you need to have MOC, and most of the time there's no type checking.
   - Invoking a method directly from QML. you need to have an ugly global variable, but so far it's the simplest. The only thing is that the function needs to be declared a slot, MOC'd and there's no type checking.
