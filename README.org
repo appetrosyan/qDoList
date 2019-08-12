@@ -71,8 +71,15 @@ The PKGBUILD is provided in the repository, so
 #+begin_src bash
 makepkg -si
 #+end_src
-*** TODO AUR 
+*** AUR 
 Install using an AUR helper of your choosing (yay, aura etc.)
+
+e.g. 
+
+#+begin_src bash
+yay -S qdolist
+#end_src
+
 * License. 
 
 This program is licensed as GPLv3. 
