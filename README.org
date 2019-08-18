@@ -1,5 +1,5 @@
 #+TITLE: qDoList a QML based todo-list manager. 
-* What this is
+* The what and the Why.
 
 A holiday project of a *physicist*, trying not to forget how to write programs in C++. 
 
