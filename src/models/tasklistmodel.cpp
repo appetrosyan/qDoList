@@ -6,7 +6,7 @@
 #include "../naturallanguageparser.h"
 #include "../tasklang.h"
 
-auto static constexpr changedSignals = {&Task::dueChanged, &Task::addedChanged, &Task::scheduledChanged, &Task::commentChanged, &Task::textChanged, &Task::childrenChanged, &Task::doneChanged};
+auto static changedSignals = {&Task::dueChanged, &Task::addedChanged, &Task::scheduledChanged, &Task::commentChanged, &Task::textChanged, &Task::childrenChanged, &Task::doneChanged};
 
 
 TaskListModel::TaskListModel(QObject* parent) : List(parent){}

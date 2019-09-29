@@ -20,6 +20,7 @@ class Task;
 class QSystemTrayIcon;
 class QMenu;
 class QQuickSettingInterface;
+class QQmlFileSelector;
 
 class QMLSignalHandler : public QObject{
 	Q_OBJECT
@@ -31,6 +32,7 @@ public:
 	QQuickWindow * window;
 	QMap<QString, Task*> m_globalMap;
 	QQmlApplicationEngine engine;
+	QQmlFileSelector *selector;
 	TaskListModel* taskList;
 	FileListModel* fileList;
 	QQuickSettingInterface* m_settingsInterface;

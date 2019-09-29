@@ -7,6 +7,7 @@
 #include <QSettings>
 #include <QSystemTrayIcon>
 #include <QQuickTextDocument>
+#include <QQmlFileSelector>
 
 #include "task.hpp"
 #include "qmlsignalhandler.hpp"
@@ -67,9 +68,14 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 	engine.rootContext()->setContextProperty("myFileList", fileList);
 	engine.rootContext()->setContextProperty("myModel", taskList);
 	engine.rootContext()->setContextProperty("settings", m_settingsInterface);
-
+	selector = new QQmlFileSelector(&engine);
 	qInfo() << "Hello world ";
+#ifdef Q_OS_LINUX
 	const QUrl url(QStringLiteral("qrc:/src/qml/main.qml"));
+#endif
+#ifdef Q_OS_MAC
+	const QUrl url(QStringLiteral("qrc:/src/qml/main.qml"));
+#endif
 	auto f = [url](QObject *obj, const QUrl &objUrl)
 	{
 		if (!obj && url == objUrl)
@@ -93,6 +99,7 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 	auto* doc = childObject<QQuickTextDocument*>(engine, "textEditor", "textDocument");
 	auto* parser = new NaturalLanguageHighlighter(doc->textDocument());
 	Q_UNUSED(parser);
+
 }
 
 
