@@ -40,39 +40,86 @@ ApplicationWindow {
 	Material.accent: sysPallete.highlight
 	Material.theme: settings.darkMode?Material.Dark:Material.light
 
-	ToolSeparator{}
-	Rectangle{
-		width:globalDrawer.width-10
-		height: childrenRect.height
-		color: "#00ffffff"
-		border.color: sysPallete.text
-		radius: 12
-		FilePicker{
-			id: filePicker
-			width: globalDrawer.width-12
-			height: 160
-			Layout.preferredWidth: 250
-			Layout.fillHeight: false
-			Layout.fillWidth: false
+	header:RowLayout{
+		Button{
+			text: "settings"
+			onClicked: globalDrawer.visible=!globalDrawer.visible
+		}
+		Button{
+			text: "actions"
+			Layout.alignment: Qt.AlignRight
+			onClicked: {
+				contextMenu.visible=!contextMenu.visible
+				contextMenu.x = this.x
+			}
 		}
 	}
-	Switch{
-		text: qsTr("Auto Sync Files")
-		checked: settings.autoSync
-		onCheckedChanged: {
-			settings.autoSync = checked
+
+	Menu{
+		id: contextMenu
+		visible: false
+		Action {
+			id: saveAll
+			shortcut: StandardKey.Save
+			text: "Save files"
+			onTriggered: {
+				rootWindow.saveAllFiles()
+			}
 		}
-		transitions: [Transition {
-				NumberAnimation{
-					properties: x
-					easing.type: Easing.InOutQuad
-					duration: 200
+	}
+
+
+	Drawer{
+		id: globalDrawer
+		height: rootWindow.height
+		width: 250
+		ColumnLayout{
+			Rectangle{
+				width:globalDrawer.width-10
+				height: childrenRect.height
+				color: "#00ffffff"
+				border.color: sysPallete.text
+				radius: 12
+				FilePicker{
+					id: filePicker
+					width: globalDrawer.width-12
+					height: 160
+					Layout.preferredWidth: 250
+					Layout.fillHeight: false
+					Layout.fillWidth: false
 				}
-			}]
+			}
+			Switch{
+				text: qsTr("Auto Sync Files")
+				checked: settings.autoSync
+				onCheckedChanged: {
+					settings.autoSync = checked
+				}
+				transitions: [Transition {
+						NumberAnimation{
+							properties: x
+							easing.type: Easing.InOutQuad
+							duration: 200
+						}
+					}]
+			}
+			Switch{
+				text: qsTr("Dark Mode")
+				checked: settings.darkMode
+				onCheckedChanged: {
+					settings.darkMode = checked
+				}
+				transitions: [Transition {
+						NumberAnimation{
+							properties: x
+							easing.type: Easing.InOutQuad
+							duration: 200
+						}
+					}]
+			}
+
+		}
 	}
-
-
-
 
 	Timer{
 		id: saveTimer

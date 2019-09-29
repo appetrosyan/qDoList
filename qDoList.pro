@@ -6,7 +6,7 @@ QT += qml quick quickcontrols2 widgets
 
 TARGET = qDoList
 INCLUDEPATH += .
-CONFIG+=C++14 qtquickcompiler
+CONFIG+=C++14
 TRANSLATIONS = translations/qdolist_ru.ts
 MOC_DIR = build/moc
 OBJECTS_DIR = build/obj
@@ -34,34 +34,34 @@ include(3rdparty/kirigami/kirigami.pri)
 
 # Input
 HEADERS += \
-                src/task.hpp \
-                src/tasklang.h \
-                src/models/filelistmodel.hpp \
-                src/models/listmodel.hpp \
-                src/naturallanguagehighlighter.h \
-                src/qmlsignalhandler.hpp \
-                src/models/tasklistmodel.hpp \
-                src/trackedfile.hpp \
-                src/naturallanguageparser.h \
-                src/qquicksettinginterface.hpp
+				src/task.hpp \
+				src/tasklang.h \
+				src/models/filelistmodel.hpp \
+				src/models/listmodel.hpp \
+				src/naturallanguagehighlighter.h \
+				src/qmlsignalhandler.hpp \
+				src/models/tasklistmodel.hpp \
+				src/trackedfile.hpp \
+				src/naturallanguageparser.h \
+				src/qquicksettinginterface.hpp
 SOURCES += \
-                src/main.cpp \
-                src/task.cpp\
-                src/naturallanguagehighlighter.cpp \
-                src/models/filelistmodel.cpp \
-                src/models/listmodel.cpp \
-                src/naturallanguageparser.cpp \
-                src/qmlsignalhandler.cpp \
-                src/qquicksettinginterface.cpp \
-                src/models/tasklistmodel.cpp \
-                src/trackedfile.cpp
+				src/main.cpp \
+				src/task.cpp\
+				src/naturallanguagehighlighter.cpp \
+				src/models/filelistmodel.cpp \
+				src/models/listmodel.cpp \
+				src/naturallanguageparser.cpp \
+				src/qmlsignalhandler.cpp \
+				src/qquicksettinginterface.cpp \
+				src/models/tasklistmodel.cpp \
+				src/trackedfile.cpp
 
 
 RESOURCES += todolist.qrc \
-        translations.qrc
+		translations.qrc
 
 DISTFILES += \
-        Android/AndroidManifest.xml
+		Android/AndroidManifest.xml
 
 
 

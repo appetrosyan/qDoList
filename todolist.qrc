@@ -13,6 +13,7 @@
         <file>src/qml/dateFunctions.js</file>
         <file>src/qml/+mac/main.qml</file>
         <file>src/qml/+mac/TaskList.qml</file>
+        <file>src/qml/+mac/InfoRow.qml</file>
     </qresource>
     <qresource prefix="/Images">
         <file>src/Icons/move.svg</file>
