@@ -39,18 +39,21 @@ ApplicationWindow {
 
 	Material.accent: sysPallete.highlight
 	Material.theme: settings.darkMode?Material.Dark:Material.light
-
-	header:RowLayout{
-		Button{
-			text: "settings"
-			onClicked: globalDrawer.visible=!globalDrawer.visible
-		}
-		Button{
-			text: "actions"
-			Layout.alignment: Qt.AlignRight
-			onClicked: {
-				contextMenu.visible=!contextMenu.visible
-				contextMenu.x = this.x
+	color: Qt.darker(Material.background, 1.2)
+	header:ToolBar{
+		RowLayout{
+			anchors.fill: parent
+			Button{
+				text: "settings"
+				onClicked: globalDrawer.visible=!globalDrawer.visible
+			}
+			Button{
+				text: "actions"
+				Layout.alignment: Qt.AlignRight
+				onClicked: {
+					contextMenu.visible=!contextMenu.visible
+					contextMenu.x = this.x
+				}
 			}
 		}
 	}
@@ -65,6 +68,7 @@ ApplicationWindow {
 			onTriggered: {
 				rootWindow.saveAllFiles()
 			}
+			icon.name: "file-save"
 		}
 	}
 
@@ -159,7 +163,7 @@ ApplicationWindow {
 	}
 	footer:Rectangle{
 		z:0
-		color: sysPallete.window
+		color: Material.background
 		width: rootWindow.width
 		height: addTask.height - 5
 		radius: 15
