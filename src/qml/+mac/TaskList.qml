@@ -14,12 +14,17 @@ ListView {
 		Rectangle{
 			height: childrenRect.height
 			width: parent.width
+			border.width: 1
+			border.color: Material.background
+			color: Qt.darker(Material.background, 1+0.01*modelData.subtaskCount)
+			radius: 5
 			InfoRow{
 				id:infoRow
+				width: parent.width
 			}
-
 			ListView{
 				x: 10
+				visible: infoRow.expanded
 				height: childrenRect.height
 				width: parent.width - x
 				anchors.top: infoRow.bottom
