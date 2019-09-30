@@ -45,6 +45,12 @@ Row{
 			onCursorVisibleChanged: {
 				modelData.requestFocus()
 			}
+			Keys.onPressed: {
+				if(event.matches(StandardKey.Undo)){
+					text = modelData.name
+				}
+			}
+
 			Keys.onUpPressed: {
 				rootWindow.moveFocusedTaskUp()
 			}
