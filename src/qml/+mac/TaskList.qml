@@ -49,6 +49,7 @@ ListView {
 				color: Material.foreground
 				font.capitalization:Font.Capitalize
 			}
+
 		}
 	}
 

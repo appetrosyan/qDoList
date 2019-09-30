@@ -21,14 +21,34 @@ Row{
 		anchors.verticalCenter: parent.verticalCenter
 		color: Material.foreground
 		Layout.alignment: Qt.AlignLeft
+		Keys.onUpPressed: {
+			rootWindow.moveFocusedTaskUp()
+		}
+		Keys.onDownPressed: {
+			rootWindow.moveFocusedTaskDown()
+		}
+		Keys.onTabPressed: {
+			rootWindow.demoteFocusedTask()
+		}
+		Keys.onBacktabPressed: {
+			rootWindow.promoteFocusedTask()
+		}
+		Keys.onReturnPressed: {
+			text=text.trim()
+			cursorVisible=false
+			editingFinished()
+			focused=false
+		}
 		onEditingFinished: {
 			modelData.name = text
+			modelData.requestFocus()
 		}
 	}
 	Label{
 		id: dueDatePicker
-		text: modelData.prettyDueDate +" "+ modelData.prettyDueTime
+		text:  modelData.prettyDueTime
 		font.bold: modelData.overDue?true:false
+		font.capitalization: Font.Capitalize
 		anchors.verticalCenter: parent.verticalCenter
 		MouseArea{
 			anchors.fill: parent
