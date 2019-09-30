@@ -34,7 +34,7 @@ Row{
 	}
 	ColumnLayout{
 		id: todoContent
-		width: parent.width - doneCheckbox.width - dueDatePicker.width -7
+		width: parent.width - doneCheckbox.width - dueDatePicker.width -7 - (caret.visible?caret.width:0)
 		anchors.verticalCenter: parent.verticalCenter
 		TextEdit{
 			id: nameRow
@@ -111,6 +111,18 @@ Row{
 				}
 				selectByMouse: true
 				wrapMode: TextEdit.Wrap
+			}
+		}
+	}
+	Label{
+		id: caret
+		text: expanded?"\u25BC":"\u25B6"
+		visible: modelData.subtaskCount
+		anchors.verticalCenter: parent.verticalCenter
+		MouseArea{
+			anchors.fill: parent
+			onClicked: {
+				expanded = !expanded
 			}
 		}
 	}
