@@ -336,6 +336,9 @@ short weekcmp(const QDateTime& a, const QDateTime& b=QDateTime::currentDateTime(
 
 QString Task::prettyDueDate() const
 {
+	if(!m_due.isValid()){
+		return "unscheduled";
+	}
 	if(isWithinWeek(m_due)){
 		if(weekcmp(m_due)==0){
 

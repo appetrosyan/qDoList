@@ -162,11 +162,10 @@ ApplicationWindow {
 		}
 	}
 	footer:Rectangle{
-		z:0
 		color: Material.background
 		width: rootWindow.width
-		height: addTask.height - 5
-		radius: 15
+		height: addTask.height
+		radius: 5
 		border.color: Qt.tint(sysPallete.base, sysPallete.highlight)
 		border.width: 1
 		TaskAdd {

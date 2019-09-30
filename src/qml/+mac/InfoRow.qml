@@ -20,25 +20,36 @@ RowLayout{
 			modelData.name = text
 		}
 	}
-	Text{
-		id:dueIndicator
+	Label{
 		text: modelData.overDue?modelData.due.toLocaleString(Qt.Locale):modelData.prettyDueDate
-		color: modelData.overDue?"red":Material.foreground
 		Layout.alignment: Qt.AlignRight
-		Layout.rightMargin: 5
+		Layout.rightMargin: 7
 		MouseArea{
-			acceptedButtons: Qt.LeftButton | Qt.RightButton
-			anchors.fill:parent
-			onWheel: {
-				// I admire the sheer stupidity. Why The FUCK, do you provide a dateTime class that extends a JavaScript DateTime class, which isn't a fucking javascript class.
-				// I seriously wonder if there were any non-morons designing the framework.
-				if(wheel.pixelDelta.x >=50){
-					modelData.due = new Date(modelData.due.setTime(modelData.due.getTime()+60*1000))
-				}
-				if(wheel.pixelDelta.x <= -50){
-					modelData.due = new Date(modelData.due.setTime(modelData.due.getTime()-60*1000))
+			anchors.fill: parent
+			onClicked: loader_pickerDialog.item.visible=!loader_pickerDialog.item.visible
+		}
+		// TODO: CREATE FUCKING REFACTORING TOOLS. IF YOU CAN WRITE COMMENTS THAT TELL ME WHAT TO DO
+		// THEN YOU CAN WRITE AN AWK SCRIPT.
+		Component {
+			id: component_pickerDialog
+			Popup{
+				property alias picker: inner_picker
+				id: pickerDialog
+				height: picker.height +20
+				width: picker.width +20
+				rightMargin: 5
+				DatePicker {
+					id: inner_picker
+					date: modelData.due
+					onNewDate: {
+						modelData.due = msg
+					}
 				}
 			}
+		}
+		Loader {
+			id: loader_pickerDialog
+			sourceComponent: component_pickerDialog
 		}
 	}
 }
