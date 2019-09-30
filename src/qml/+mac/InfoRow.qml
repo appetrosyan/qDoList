@@ -7,12 +7,30 @@ Row{
 	property bool expanded: true
 	CheckBox{
 		id: doneCheckbox
-		checked: modelData.done
-		onClicked:{
-			modelData.toggle()
-			checked = modelData.done
+		checkState: !modelData.done?
+						(modelData.doneSubtaskCount >0 ? 1:0)
+					  :2
+		checkable: false
+		onClicked: {
+			if(!modelData.toggle()){
+				shake.start()
+			}
+		}
+		SequentialAnimation on x{
+			id: shake
+			NumberAnimation {
+				to: 10
+				duration: 80
+				easing.type: Easing.InOutBounce
+			}
+			NumberAnimation{
+				to: 0
+				duration: 150
+				easing.type: Easing.InOutBounce
+			}
 		}
 		Layout.alignment: Qt.AlignLeft
+
 	}
 	TextEdit{
 		id: nameRow
