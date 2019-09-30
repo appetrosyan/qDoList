@@ -32,36 +32,43 @@ Row{
 		Layout.alignment: Qt.AlignLeft
 
 	}
-	TextEdit{
-		id: nameRow
+	ColumnLayout{
 		width: parent.width - doneCheckbox.width - dueDatePicker.width -7
-		text: modelData.name
 		anchors.verticalCenter: parent.verticalCenter
-		color: Material.foreground
-		Layout.alignment: Qt.AlignLeft
-		onCursorVisibleChanged: {
-			modelData.requestFocus()
+		TextEdit{
+			id: nameRow
+			text: modelData.name
+			//		anchors.verticalCenter: parent.verticalCenter
+			color: Material.foreground
+			Layout.alignment: Qt.AlignLeft
+			onCursorVisibleChanged: {
+				modelData.requestFocus()
+			}
+			Keys.onUpPressed: {
+				rootWindow.moveFocusedTaskUp()
+			}
+			Keys.onDownPressed: {
+				rootWindow.moveFocusedTaskDown()
+			}
+			Keys.onTabPressed: {
+				rootWindow.demoteFocusedTask()
+			}
+			Keys.onBacktabPressed: {
+				rootWindow.promoteFocusedTask()
+			}
+			Keys.onReturnPressed: {
+				text=text.trim()
+				cursorVisible=false
+				editingFinished()
+				focused=false
+			}
+			onEditingFinished: {
+				modelData.name = text
+			}
 		}
-		Keys.onUpPressed: {
-			rootWindow.moveFocusedTaskUp()
-		}
-		Keys.onDownPressed: {
-			rootWindow.moveFocusedTaskDown()
-		}
-		Keys.onTabPressed: {
-			rootWindow.demoteFocusedTask()
-		}
-		Keys.onBacktabPressed: {
-			rootWindow.promoteFocusedTask()
-		}
-		Keys.onReturnPressed: {
-			text=text.trim()
-			cursorVisible=false
-			editingFinished()
-			focused=false
-		}
-		onEditingFinished: {
-			modelData.name = text
+		Label{
+			text: "%1/%2".arg(modelData.doneSubtaskCount).arg(modelData.subtaskCount)
+			font.pixelSize: nameRow.font.pixelSize-4
 		}
 	}
 	Label{
