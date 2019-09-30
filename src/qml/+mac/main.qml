@@ -41,13 +41,15 @@ ApplicationWindow {
 	header:ToolBar{
 		RowLayout{
 			anchors.fill: parent
-			Button{
-				text: "settings"
+			ToolButton{
+				text: "\u2263"
+				font.pixelSize: 20
 				onClicked: globalDrawer.visible=!globalDrawer.visible
 			}
-			Button{
-				text: "actions"
+			ToolButton{
+				text: "\u205E"
 				Layout.alignment: Qt.AlignRight
+				font.pixelSize: 20
 				onClicked: {
 					contextMenu.visible=!contextMenu.visible
 					contextMenu.x = this.x

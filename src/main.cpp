@@ -32,7 +32,8 @@ int main(int argc, char ** argv)
 	QLoggingCategory::setFilterRules("*.debug=true\nqt.*.debug=false");
 	QIcon::setThemeName("breeze");
 
-	QFontDatabase::addApplicationFont(":fontello.ttf");
+	if (QFontDatabase::addApplicationFont(":/fontello.ttf") == -1)
+		qWarning() << "Failed to load fontello.ttf";
 
 	// Starting the system tray.
 	QSystemTrayIcon tray(&app);

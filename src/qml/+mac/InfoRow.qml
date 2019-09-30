@@ -50,7 +50,6 @@ Row{
 					text = modelData.name
 				}
 			}
-
 			Keys.onUpPressed: {
 				rootWindow.moveFocusedTaskUp()
 			}
