@@ -11,7 +11,13 @@ class List : public QAbstractListModel {
 	Q_PROPERTY(QObject * parent READ parent WRITE setParent)
 	Q_CLASSINFO("DefaultProperty", "content")
 public:
-	QList<QObject *> _data;
+	typedef QList<QObject*>::iterator iterator;
+	typedef QList<QObject*>::const_iterator const_iterator;
+	iterator begin() { return _data.begin();}
+	const_iterator cbegin() {return _data.cbegin();}
+	iterator end() { return _data.end();}
+	const_iterator cend() {return _data.cend();}
+	QObject* back() {return _data.back();}
 	List(QObject *parent = nullptr) : QAbstractListModel(parent) { }
 	List &operator=(const List& nu);
 	int rowCount(const QModelIndex &p=QModelIndex()) const override;
@@ -33,7 +39,8 @@ public slots:
 	bool isEmpty();
 signals:
 	void sizeChanged();
-private:
+protected:
+	QList<QObject *> _data;
 	bool inBounds(int index){
 		return (index > -1) && (index < _data.size());
 	}

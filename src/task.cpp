@@ -42,9 +42,9 @@ Task::~Task()
 bool Task::isEverySubtaskDone() const
 {
 	bool everySubtaskIsDone = true;
-	if(m_submodel->_data.isEmpty())
+	if(m_submodel->size()==0)
 		return everySubtaskIsDone;
-	for(auto& t: m_submodel->_data){
+	for(auto& t: *m_submodel){
 		auto c = dynamic_cast<Task*>(t);
 		everySubtaskIsDone =
 				everySubtaskIsDone &&
@@ -69,7 +69,7 @@ bool Task::toggle() {
 	if(this->isEverySubtaskDone()){
 		if(m_done){
 			m_done = false;
-			for(auto& t: m_submodel->_data){
+			for(auto& t: *m_submodel){
 				auto c = dynamic_cast<Task*>(t);
 				c->toggle();
 			}
@@ -161,7 +161,7 @@ Task &Task::setDone(bool done)
 	return *this;
 }
 
-bool Task::hasChildren() const { return !m_submodel->_data.isEmpty(); }
+bool Task::hasChildren() const { return m_submodel->size() !=0; }
 
 QDateTime Task::added() const { return m_added;}
 
@@ -364,7 +364,7 @@ QString Task::prettyDueTime() const{
 		} else if (time.hour() > 15 && time.hour() < 20){
 			return "evening";
 		} else {
-			return "night";
+			return m_due.date().day()==QDate::currentDate().day()?"tonight":"night";
 		}
 	}
 }

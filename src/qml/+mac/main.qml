@@ -87,6 +87,14 @@ ApplicationWindow {
 			}
 			icon.name: "file-save-as"
 		}
+		Action {
+			id: prune
+			shortcut: StandardKey.Delete
+			text: "Prune finished tasks"
+			onTriggered: {
+				myModel.prune()
+			}
+		}
 	}
 
 

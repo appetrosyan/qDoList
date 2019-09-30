@@ -15,7 +15,7 @@ public:
 	void makeChanges();
 	void connectSubtaskChanges(Task *o);
 	int totalTasks(){
-		return _data.count();
+		return size();
 	}
 	int incompleteTasks(){
 		int ret=0;
@@ -26,6 +26,7 @@ public:
 		}
 		return ret;
 	}
+
 	void unmakeChanges();
 signals:
 	void changesMade();

@@ -110,7 +110,7 @@ void QMLSignalHandler::resetContext()
 void QMLSignalHandler::lastFocusedGuard(){
 	if(Task::lastFocusedTask==nullptr){
 		if(!taskList->isEmpty())
-			qobject_cast<Task*> (taskList->_data.back())->requestFocus();
+			qobject_cast<Task*> (taskList->back())->requestFocus();
 	}
 }
 
@@ -187,7 +187,7 @@ void QMLSignalHandler::saveModelToFile(QString fname)
 void QMLSignalHandler::syncAllFiles()
 {
 	if(!fileList->isEmpty()){
-		for(auto x: fileList->_data){
+		for(auto x: *fileList){
 			auto y = qobject_cast<TrackedFile*>(x);
 			if(y->modified()){
 				y->saveToFile();
