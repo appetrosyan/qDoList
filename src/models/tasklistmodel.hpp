@@ -33,6 +33,7 @@ public slots:
 	void append(Task* o);
 	void createNewTask(QString taskName);
 	QObject* removeTask(Task* t);
+	void prune();
 private:
 	bool m_internalChange=false;
 };

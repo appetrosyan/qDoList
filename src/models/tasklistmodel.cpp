@@ -46,7 +46,14 @@ void TaskListModel::unmakeChanges(){
 	m_internalChange = false;
 }
 
-
+void TaskListModel::prune(){
+	for(QObject* t : _data){
+		Task* tt=UNFUCK(t);
+		if(tt->done()){
+			tt->goAway();
+		}
+	}
+}
 void TaskListModel::append(Task *o)
 {
 	o->setSuperModel(this);
@@ -79,7 +86,6 @@ void TaskListModel::createNewTask(QString taskName)
 				}
 			}
 			if(c.captured(1).contains("-")){
-//				Task* currentTask=UNFUCK(_data.back());
 				if(Task::lastFocusedTask==nullptr){
 					Task::lastFocusedTask=UNFUCK(_data.back());
 				}else {

@@ -348,7 +348,7 @@ QString Task::prettyDueDate() const
 			return tr("last %1").arg(m_due.toString("dddd"));
 		}
 	} else {
-		return m_due.toString(Qt::LocalDate);
+		return m_due.toString(Qt::SystemLocaleShortDate);
 	}
 }
 
