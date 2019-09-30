@@ -66,9 +66,36 @@ Row{
 				modelData.name = text
 			}
 		}
-		Label{
-			text: "%1/%2".arg(modelData.doneSubtaskCount).arg(modelData.subtaskCount)
-			font.pixelSize: nameRow.font.pixelSize-4
+		Row{
+			Label{
+				text: "%1/%2".arg(modelData.doneSubtaskCount).arg(modelData.subtaskCount)
+				visible: modelData.subtaskCount > 0
+				font.pixelSize: nameRow.font.pixelSize-4
+				opacity: 0.70
+			}
+			TextEdit{
+				text: (modelData.comment?modelData.comment:"Comment")
+				color: Material.foreground
+				font.pixelSize: nameRow.font.pixelSize-4
+				opacity: modelData.comment?1:0.25
+				onEditingFinished: {
+					if(text !== "Comment" && text.trim() !== "")
+						modelData.comment = text
+					else{
+						text = "Comment"
+						modelData.comment = ""
+					}
+				}
+				Keys.onReturnPressed: {
+					editingFinished()
+				}
+
+				onCursorVisibleChanged: {
+					if(cursorVisible && text ==="Comment"){
+						text = ""
+					}
+				}
+			}
 		}
 	}
 	Label{
