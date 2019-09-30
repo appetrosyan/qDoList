@@ -27,6 +27,7 @@ class Task : public QObject {
 	Q_PROPERTY(int subtaskCount READ subtaskCount NOTIFY childrenChanged)
 	Q_PROPERTY(int doneSubtaskCount READ doneSubtaskCount NOTIFY childToggled)
 	Q_PROPERTY(QString prettyDueDate READ prettyDueDate NOTIFY dueChanged)
+	Q_PROPERTY(QString prettyDueTime READ prettyDueTime NOTIFY dueChanged)
 	Q_PROPERTY(bool isLastFocused READ isLastFocused NOTIFY lastFocusedChanged)
 public:
 	explicit Task(QString text="",
@@ -68,6 +69,7 @@ public:
 	Task& updateFromJson(QJsonObject json);
 	QString comment() const;
 	QString prettyDueDate() const;
+	QString prettyDueTime() const;
 	Task& setComment(const QString& msg);
 	Task& setSuperModel(TaskListModel* superModel);
 	void forwardSignal();
@@ -89,7 +91,7 @@ signals:
 	void lastFocusedChanged();
 
 public slots:
-	Q_INVOKABLE bool  isOverDue() const;
+	Q_INVOKABLE bool isOverDue() const;
 	Q_INVOKABLE bool toggle();
 	Q_INVOKABLE void goAway();
 	Q_INVOKABLE void demote();

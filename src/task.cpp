@@ -348,7 +348,24 @@ QString Task::prettyDueDate() const
 			return tr("last %1").arg(m_due.toString("dddd"));
 		}
 	} else {
-		return m_due.toString(Qt::SystemLocaleShortDate);
+		return m_due.date().toString(Qt::SystemLocaleShortDate);
+	}
+}
+
+QString Task::prettyDueTime() const{
+	if(!m_due.isValid()){
+		return "";
+	} else{
+		QTime time = m_due.time();
+		if(time.hour() > 0 && time.hour()<10){
+			return "morning";
+		}else if (time.hour() > 10 && time.hour() < 15) {
+			return "afternoon";
+		} else if (time.hour() > 15 && time.hour() < 20){
+			return "evening";
+		} else {
+			return "night";
+		}
 	}
 }
 

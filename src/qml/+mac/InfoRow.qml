@@ -27,7 +27,7 @@ Row{
 	}
 	Label{
 		id: dueDatePicker
-		text: modelData.prettyDueDate
+		text: modelData.prettyDueDate +" "+ modelData.prettyDueTime
 		font.bold: modelData.overDue?true:false
 		anchors.verticalCenter: parent.verticalCenter
 		MouseArea{
