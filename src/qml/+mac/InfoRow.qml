@@ -60,15 +60,16 @@ Row{
 				text=text.trim()
 				cursorVisible=false
 				editingFinished()
-				focused=false
+//				focused=false
 			}
 			onEditingFinished: {
 				modelData.name = text
 			}
+			selectByMouse: true
 		}
 		Row{
 			Label{
-				text: "%1/%2".arg(modelData.doneSubtaskCount).arg(modelData.subtaskCount)
+				text: "[%1/%2] ".arg(modelData.doneSubtaskCount).arg(modelData.subtaskCount)
 				visible: modelData.subtaskCount > 0
 				font.pixelSize: nameRow.font.pixelSize-4
 				opacity: 0.70
@@ -95,6 +96,7 @@ Row{
 						text = ""
 					}
 				}
+				selectByMouse: true
 			}
 		}
 	}
