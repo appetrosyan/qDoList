@@ -116,13 +116,22 @@ Row{
 	}
 	Label{
 		id: caret
-		text: expanded?"\u25BC":"\u25B6"
+		text: "\u25B6"
+		rotation: expanded?90:0
 		visible: modelData.subtaskCount
 		anchors.verticalCenter: parent.verticalCenter
 		MouseArea{
 			anchors.fill: parent
 			onClicked: {
 				expanded = !expanded
+			}
+		}
+		Behavior on rotation {
+			NumberAnimation {
+				easing.overshoot: 2.702
+				easing.type: Easing.InBack
+				properties: "rotation"
+				duration: 300
 			}
 		}
 	}

@@ -60,12 +60,25 @@ ListView {
 			ListView{
 				x: 10
 				visible: infoRow.expanded
-				height: childrenRect.height
+				height: visible?childrenRect.height:0
+				opacity: visible?1:0
 				width: parent.width - x
 				anchors.top: infoRow.bottom
 				model: modelData.subModel
 				delegate: accordion
 				interactive: false
+				Behavior on height {
+					NumberAnimation {
+						properties: "height"
+						duration: 200
+					}
+				}
+				Behavior on opacity {
+					NumberAnimation {
+						properties: "opacity"
+						duration: 200
+					}
+				}
 			}
 		}
 	}
