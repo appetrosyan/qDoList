@@ -35,7 +35,7 @@ ApplicationWindow {
 	}
 
 
-	Material.accent: sysPallete.highlight
+	Material.accent: Material.Red
 	Material.theme: settings.darkMode?Material.Dark:Material.light
 	color: Qt.darker(Material.background, 1.2)
 	header:ToolBar{
@@ -104,52 +104,64 @@ ApplicationWindow {
 		id: globalDrawer
 		height: rootWindow.height
 		width: 250
-		ColumnLayout{
-			Rectangle{
-				width:globalDrawer.width-10
-				height: childrenRect.height
-				color: "#00ffffff"
-				border.color: sysPallete.text
-				radius: 12
-				FilePicker{
-					id: filePicker
-					width: globalDrawer.width-12
-					height: 160
-					Layout.preferredWidth: 250
-					Layout.fillHeight: false
-					Layout.fillWidth: false
-				}
-			}
-			Switch{
-				text: qsTr("Auto Sync Files")
-				checked: settings.autoSync
-				onCheckedChanged: {
-					settings.autoSync = checked
-				}
-				transitions: [Transition {
-						NumberAnimation{
-							properties: x
-							easing.type: Easing.InOutQuad
-							duration: 200
-						}
-					}]
-			}
-			Switch{
-				text: qsTr("Dark Mode")
-				checked: settings.darkMode
-				onCheckedChanged: {
-					settings.darkMode = checked
-				}
-				transitions: [Transition {
-						NumberAnimation{
-							properties: x
-							easing.type: Easing.InOutQuad
-							duration: 200
-						}
-					}]
-			}
+		// TODO: Move position bindings from the component to the Loader.
+		//       Check all uses of 'parent' inside the root element of the component.
+		//       Rename all outer uses of the id "filePicker" to "loader_ColumnLayout.item.filePicker".
+		Component {
+			id: component_ColumnLayout
+			ColumnLayout{
+				property alias filePicker: inner_filePicker
 
+				Rectangle{
+					width:globalDrawer.width-10
+					height: childrenRect.height
+					color: "#00ffffff"
+					border.color: sysPallete.text
+					radius: 12
+					FilePicker{
+						id: inner_filePicker
+						width: globalDrawer.width-12
+						height: 160
+						Layout.preferredWidth: 250
+						Layout.fillHeight: false
+						Layout.fillWidth: false
+					}
+				}
+				Switch{
+					text: qsTr("Auto Sync Files")
+					checked: settings.autoSync
+					onCheckedChanged: {
+						settings.autoSync = checked
+					}
+					transitions: [Transition {
+							NumberAnimation{
+								properties: x
+								easing.type: Easing.InOutQuad
+								duration: 200
+							}
+						}]
+				}
+				Switch{
+					text: qsTr("Dark Mode")
+					checked: settings.darkMode
+					onCheckedChanged: {
+						settings.darkMode = checked
+					}
+					transitions: [Transition {
+							NumberAnimation{
+								properties: x
+								easing.type: Easing.InOutQuad
+								duration: 200
+							}
+						}]
+				}
+			}
 		}
+		Loader {
+			id: loader_ColumnLayout
+			sourceComponent: component_ColumnLayout
+		}
+
 	}
 
 	Timer{

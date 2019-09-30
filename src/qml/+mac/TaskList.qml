@@ -69,8 +69,10 @@ ListView {
 				interactive: false
 				Behavior on height {
 					NumberAnimation {
+						easing.type: Easing.OutQuad
 						properties: "height"
 						duration: 200
+
 					}
 				}
 				Behavior on opacity {

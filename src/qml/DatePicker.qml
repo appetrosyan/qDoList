@@ -79,7 +79,7 @@ ColumnLayout {
 		Tumbler {
 			id: day
 			property int wheelTicks:0
-			currentIndex: DF.currentDay()
+			currentIndex: DF.currentDay() -1
 			model: daysInMonth(month.currentIndex+1, leapyear(year.currentIndex+ currentYear))
 			Layout.preferredHeight: 100
 			Layout.preferredWidth: 30
@@ -166,6 +166,7 @@ ColumnLayout {
 			property int wheelTicks:0
 			Layout.preferredHeight: 80
 			Layout.preferredWidth: 18
+			currentIndex: DF.currentHour()
 		}
 		Label{
 			text: " : "
@@ -177,6 +178,7 @@ ColumnLayout {
 			property int wheelTicks:0
 			Layout.preferredHeight: 80
 			Layout.preferredWidth: 18
+			currentIndex: DF.currentMinute()
 
 		}
 	}
