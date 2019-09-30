@@ -34,5 +34,23 @@ ListView {
 			}
 		}
 	}
+	section.property: "modelData.prettyDueDate"
+	section.criteria: ViewSection.FullString
+	section.delegate: sectionHeading
+	Component {
+		id: sectionHeading
+		Rectangle {
+			width: accordion.width
+			height: childrenRect.height
+			color: Material.accent
+			Text {
+				text: section
+				font.bold: true
+				color: Material.foreground
+				font.capitalization:Font.Capitalize
+			}
+		}
+	}
+
 }
 

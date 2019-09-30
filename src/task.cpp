@@ -341,7 +341,6 @@ QString Task::prettyDueDate() const
 	}
 	if(isWithinWeek(m_due)){
 		if(weekcmp(m_due)==0){
-
 			return m_due.date().day() == QDate::currentDate().day()?tr("today"):tr("this %1").arg(m_due.toString("dddd"));
 		}else  if(weekcmp(m_due)>0){
 			return tr("next %1").arg(m_due.toString("dddd"));

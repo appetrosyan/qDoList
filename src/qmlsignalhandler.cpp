@@ -85,7 +85,6 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 	engine.load(url);
 	window = qobject_cast<QQuickWindow *>(engine.rootObjects().value(0));
 	populateModel();
-	connect(window, SIGNAL(sendMessage(QString)), this, SLOT(handleMessage(QString)));
 //	connect(window, SIGNAL(deleteAt(int)), this, SLOT(removeAt(int)));
 	connect(window, SIGNAL(writeToFile(QString)), this, SLOT(saveModelToFile(QString)));
 	connect(window, SIGNAL(loadFromFile(QString)), this, SLOT(loadModelFromFile(QString)));

@@ -20,8 +20,6 @@ ApplicationWindow {
 	.arg((myFileList.activeTrackedFile!=null)?(myFileList.activeTrackedFile.isModified?"*":""):"")
 	property int mm: Screen.pixelDensity
 	visible: true
-	signal addTask
-	signal sendMessage(string msg)
 	signal updateDue(int x, string newDue)
 	signal writeToFile(string file)
 	signal loadFromFile(string file)
@@ -64,11 +62,30 @@ ApplicationWindow {
 		Action {
 			id: saveAll
 			shortcut: StandardKey.Save
-			text: "Save files"
+			text: "Save all"
 			onTriggered: {
 				rootWindow.saveAllFiles()
 			}
 			icon.name: "file-save"
+		}
+		Action {
+			id: openFile
+			shortcut: StandardKey.Open
+			text: "Open"
+			onTriggered: {
+				loadTodoListDialog.visible=true
+			}
+			icon.name: "file-open"
+		}
+		Action {
+			id: saveAs
+			shortcut: StandardKey.SaveAs
+			text: "Save as"
+			onTriggered: {
+				loadTodoListDialog.write=true
+				loadTodoListDialog.visible=true
+			}
+			icon.name: "file-save-as"
 		}
 	}
 

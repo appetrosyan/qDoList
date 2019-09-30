@@ -3,17 +3,22 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Material 2.3
 
-RowLayout{
+Row{
 	property bool expanded: true
 	CheckBox{
+		id: doneCheckbox
 		checked: modelData.done
 		onClicked:{
 			modelData.toggle()
 			checked = modelData.done
 		}
+		Layout.alignment: Qt.AlignLeft
 	}
 	TextEdit{
+		id: nameRow
+		width: parent.width - doneCheckbox.width - dueDatePicker.width -7
 		text: modelData.name
+		anchors.verticalCenter: parent.verticalCenter
 		color: Material.foreground
 		Layout.alignment: Qt.AlignLeft
 		onEditingFinished: {
@@ -21,9 +26,10 @@ RowLayout{
 		}
 	}
 	Label{
-		text: modelData.overDue?modelData.due.toLocaleString(Qt.Locale):modelData.prettyDueDate
-		Layout.alignment: Qt.AlignRight
-		Layout.rightMargin: 7
+		id: dueDatePicker
+		text: modelData.prettyDueDate
+		font.bold: modelData.overDue?true:false
+		anchors.verticalCenter: parent.verticalCenter
 		MouseArea{
 			anchors.fill: parent
 			onClicked: loader_pickerDialog.item.visible=!loader_pickerDialog.item.visible
