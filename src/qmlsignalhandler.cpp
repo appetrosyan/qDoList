@@ -85,7 +85,6 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 	engine.load(url);
 	window = qobject_cast<QQuickWindow *>(engine.rootObjects().value(0));
 	populateModel();
-//	connect(window, SIGNAL(deleteAt(int)), this, SLOT(removeAt(int)));
 	connect(window, SIGNAL(writeToFile(QString)), this, SLOT(saveModelToFile(QString)));
 	connect(window, SIGNAL(loadFromFile(QString)), this, SLOT(loadModelFromFile(QString)));
 	connect(window, SIGNAL(saveAllFiles()), this, SLOT(syncAllFiles()));
@@ -98,7 +97,6 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 	auto* doc = childObject<QQuickTextDocument*>(engine, "textEditor", "textDocument");
 	auto* parser = new NaturalLanguageHighlighter(doc->textDocument());
 	Q_UNUSED(parser);
-
 }
 
 

@@ -95,7 +95,7 @@ void Task::goAway()
 		emit m_superTask->childrenChanged();
 		emit childrenChanged();
 	}else {
-		delete m_superModel->removeTask(this);
+		m_superModel->removeTask(this);
 		emit m_superModel->changesMade();
 	}
 }

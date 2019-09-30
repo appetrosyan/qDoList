@@ -7,8 +7,43 @@ import ac.uk.cam.ap886 1.0
 import core 1.0
 
 ListView {
+	id: listView
 	displayMarginBeginning: 60
 	displayMarginEnd: 60
+	add: slideIn
+	remove: dropOut
+	removeDisplaced: smoothShuffle
+	moveDisplaced:smoothShuffle
+	move: smoothShuffle
+	Transition {
+		id: slideIn
+		NumberAnimation {
+			easing.amplitude: 1.05
+			properties: "x"
+			from: 100
+			duration: 400
+			easing.type: Easing.OutExpo
+		}
+	}
+	Transition {
+		id: dropOut
+		NumberAnimation {
+			easing.amplitude: 1.05
+			properties: "x"
+			to: listView.width
+			duration: 600
+			easing.type: Easing.OutExpo
+		}
+	}
+
+	Transition{
+		id:smoothShuffle
+		NumberAnimation{
+			properties: "y"
+			to: accordion.height
+			easing.type: Easing.InOutCirc
+		}
+	}
 	delegate: Component{
 		id: accordion
 		Rectangle{
