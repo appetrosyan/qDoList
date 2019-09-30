@@ -33,6 +33,7 @@ Row{
 
 	}
 	ColumnLayout{
+		id: todoContent
 		width: parent.width - doneCheckbox.width - dueDatePicker.width -7
 		anchors.verticalCenter: parent.verticalCenter
 		TextEdit{
@@ -75,6 +76,7 @@ Row{
 				opacity: 0.70
 			}
 			TextEdit{
+				width: todoContent.width
 				text: (modelData.comment?modelData.comment:"Comment")
 				color: Material.foreground
 				font.pixelSize: nameRow.font.pixelSize-4
@@ -88,7 +90,13 @@ Row{
 					}
 				}
 				Keys.onReturnPressed: {
-					editingFinished()
+					if(event.modifiers === Qt.NoModifier)
+						editingFinished()
+				}
+				Keys.onPressed: {
+					if(event.matches(StandardKey.Undo)){
+						text = modelData.comment
+					}
 				}
 
 				onCursorVisibleChanged: {
@@ -97,6 +105,7 @@ Row{
 					}
 				}
 				selectByMouse: true
+				wrapMode: TextEdit.Wrap
 			}
 		}
 	}
