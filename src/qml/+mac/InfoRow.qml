@@ -21,6 +21,9 @@ Row{
 		anchors.verticalCenter: parent.verticalCenter
 		color: Material.foreground
 		Layout.alignment: Qt.AlignLeft
+		onCursorVisibleChanged: {
+			modelData.requestFocus()
+		}
 		Keys.onUpPressed: {
 			rootWindow.moveFocusedTaskUp()
 		}
@@ -41,7 +44,6 @@ Row{
 		}
 		onEditingFinished: {
 			modelData.name = text
-			modelData.requestFocus()
 		}
 	}
 	Label{

@@ -30,8 +30,8 @@ ListView {
 		NumberAnimation {
 			easing.amplitude: 1.05
 			properties: "x"
-			to: listView.width
-			duration: 600
+			to: 10
+			duration: 200
 			easing.type: Easing.OutExpo
 		}
 	}
