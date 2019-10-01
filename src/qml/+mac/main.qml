@@ -219,6 +219,7 @@ ApplicationWindow {
 		width: rootWindow.width
 		height: suggestionList.height + 30
 		margins: sidebar.visible?300:0
+		y: footer.y - suggestions.height
 		ListView{
 			id: suggestionList
 			model: myModel
