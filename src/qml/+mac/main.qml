@@ -43,6 +43,7 @@ ApplicationWindow {
 			anchors.fill: parent
 			ToolButton{
 				text: "\u2263"
+				visible: rootWindow.width < 500
 				font.pixelSize: 24
 				onClicked: globalDrawer.visible=!globalDrawer.visible
 			}
@@ -99,6 +100,53 @@ ApplicationWindow {
 		}
 	}
 
+	Component {
+		id: sidebar
+		ColumnLayout{
+			property alias filePicker: inner_filePicker
+			Rectangle{
+				width:globalDrawer.width-10
+				height: childrenRect.height
+				color: Material.background
+				border.color: Material.foreground
+				radius: 12
+				FilePicker{
+					id: inner_filePicker
+					width: globalDrawer.width-12
+					height: 160
+					Layout.preferredWidth: 250
+					Layout.fillHeight: false
+					Layout.fillWidth: false
+				}
+			}
+			Switch{
+				text: qsTr("Auto Sync Files")
+				checked: settings.autoSync
+				onCheckedChanged: settings.autoSync = checked
+				transitions: [Transition {
+						NumberAnimation{
+							properties: x
+							easing.type: Easing.InOutQuad
+							duration: 200
+						}
+					}]
+			}
+			Switch{
+				text: qsTr("Dark Mode")
+				checked: settings.darkMode
+				onCheckedChanged: {
+					settings.darkMode = checked
+				}
+				transitions: [Transition {
+						NumberAnimation{
+							properties: x
+							easing.type: Easing.InOutQuad
+							duration: 200
+						}
+					}]
+			}
+		}
+	}
 
 	Drawer{
 		id: globalDrawer
@@ -107,61 +155,10 @@ ApplicationWindow {
 		// TODO: Move position bindings from the component to the Loader.
 		//       Check all uses of 'parent' inside the root element of the component.
 		//       Rename all outer uses of the id "filePicker" to "loader_ColumnLayout.item.filePicker".
-		Component {
-			id: component_ColumnLayout
-			ColumnLayout{
-				property alias filePicker: inner_filePicker
-
-				Rectangle{
-					width:globalDrawer.width-10
-					height: childrenRect.height
-					color: "#00ffffff"
-					border.color: sysPallete.text
-					radius: 12
-					FilePicker{
-						id: inner_filePicker
-						width: globalDrawer.width-12
-						height: 160
-						Layout.preferredWidth: 250
-						Layout.fillHeight: false
-						Layout.fillWidth: false
-					}
-				}
-				Switch{
-					text: qsTr("Auto Sync Files")
-					checked: settings.autoSync
-					onCheckedChanged: {
-						settings.autoSync = checked
-					}
-					transitions: [Transition {
-							NumberAnimation{
-								properties: x
-								easing.type: Easing.InOutQuad
-								duration: 200
-							}
-						}]
-				}
-				Switch{
-					text: qsTr("Dark Mode")
-					checked: settings.darkMode
-					onCheckedChanged: {
-						settings.darkMode = checked
-					}
-					transitions: [Transition {
-							NumberAnimation{
-								properties: x
-								easing.type: Easing.InOutQuad
-								duration: 200
-							}
-						}]
-				}
-			}
-		}
 		Loader {
 			id: loader_ColumnLayout
-			sourceComponent: component_ColumnLayout
+			sourceComponent: sidebar
 		}
-
 	}
 
 	Timer{
@@ -180,6 +177,14 @@ ApplicationWindow {
 			id: centerpiece
 			Layout.fillHeight: true
 			Layout.fillWidth: true
+			Rectangle{
+				id: drawerReplacer
+
+			}
+			Loader{
+				sourceComponent: sidebar
+				visible: rootWindow.width> 500
+			}
 
 			ColumnLayout {
 				Layout.alignment: Qt.RightButton
