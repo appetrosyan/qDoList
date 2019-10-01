@@ -15,11 +15,17 @@ QQuickSettingInterface::QQuickSettingInterface(QObject *parent) : QObject(parent
 	m_autoSync =settings.value("behaviour/autoSync", false).toBool();
 	connect(this, &QQuickSettingInterface::darkModeChanged, this, [=](){settings.setValue("behaviour/autoSync", m_autoSync);});
 
+	m_allowEval=settings.value("behaviour/allowEval", false).toBool();
+	connect(this, &QQuickSettingInterface::allowEvalChanged, this, [=](){settings.setValue("behaviour/allowEval", m_allowEval);});
 }
 
 bool QQuickSettingInterface::autoSync() const
 {
 	return m_autoSync;
+}
+
+void QQuickSettingInterface::setAllowEval(bool allowEval){
+	genericSet(allowEval);
 }
 
 void QQuickSettingInterface::setAutoSync(bool autoSync)
@@ -35,6 +41,11 @@ void QQuickSettingInterface::writeRecentFilesToDisk(QStringList files)
 		settings.setValue("fileName", files.at(i));
 	}
 	settings.endArray();
+}
+
+bool QQuickSettingInterface::allowEval() const
+{
+	return m_allowEval;
 }
 
 bool QQuickSettingInterface::darkMode() const

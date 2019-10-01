@@ -79,10 +79,24 @@ ApplicationWindow {
 		id:filterMenu
 		visible: false
 		Action{
+			id: filterIncomplete
+			text: "Filter Incomplete"
+			onTriggered: {
+				filter((a) => !a.done)
+			}
+		}
+		Action{
+			id: filterOverdue
+			text: "Filter Overdue"
+			onTriggered: {
+				filter((a) => a.overDue)
+			}
+		}
+		Action{
 			id: filterDone
 			text: "Filter Done"
 			onTriggered: {
-				filter((a) => !a.done)
+				filter((a) => a.done)
 			}
 		}
 	}
@@ -181,6 +195,21 @@ ApplicationWindow {
 						}
 					}]
 			}
+			Switch{
+				text: qsTr("Allow JavaScript evaluation")
+				checked: settings.allowEval
+				onCheckedChanged: {
+					settings.allowEval = checked
+				}
+				transitions: [Transition {
+						NumberAnimation{
+							properties: x
+							easing.type: Easing.InOutQuad
+							duration: 200
+						}
+					}]
+			}
+
 		}
 	}
 
@@ -305,6 +334,14 @@ ApplicationWindow {
 							console.log("overDue")
 						} else if(msg.match(/\s+none/gi)){
 							unfilter()
+						} else if (msg.match(/\s+custom/gi)) {
+							let tag = msg.match(/custom\s+(.*)/i)
+							if(settings.allowEval){
+								// @disable-check M23
+								filter(eval(tag[1]))
+							} else {
+								rootWindow.showNotification("JavaScript eval disabled. Custom filters will not work.")
+							}
 						} else {
 							rootWindow.showNotification("Unrecognised filter string: %1".arg(msg))
 						}
@@ -316,6 +353,7 @@ ApplicationWindow {
 					myModel.createNewTask(msg)
 				}
 				addTask.text = ""
+				suggestions.visible=false
 			}
 			onSuggestionsRequested: {
 				suggestions.visible=true
