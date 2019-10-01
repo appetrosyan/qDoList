@@ -219,7 +219,6 @@ ApplicationWindow {
 		width: 250
 		// TODO: Move position bindings from the component to the Loader.
 		//       Check all uses of 'parent' inside the root element of the component.
-		//       Rename all outer uses of the id "filePicker" to "loader_ColumnLayout.item.filePicker".
 		Loader {
 			id: loader_ColumnLayout
 			sourceComponent: sidebar
