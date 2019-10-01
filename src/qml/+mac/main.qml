@@ -7,6 +7,7 @@ import QtQuick.Dialogs 1.2
 import QSettings 1.0
 import ac.uk.cam.ap886 1.0
 import core 1.0
+import "sortUtils.js" as SortUtils
 
 ApplicationWindow {
 	id: rootWindow
@@ -48,6 +49,19 @@ ApplicationWindow {
 				font.pixelSize: 24
 				onClicked: globalDrawer.visible=!globalDrawer.visible
 			}
+			Button{
+				text: "filtered"
+				flat: !taskList.filtered
+				font.capitalization: Font.Capitalize
+				Layout.alignment: Qt.AlignRight
+				onClicked:  {
+					if(taskList.filtered){
+						unfilter()
+					} else {
+						filterMenu.visible=true
+					}
+				}
+			}
 			ToolButton{
 				text: "\u205E"
 				Layout.alignment: Qt.AlignRight
@@ -56,6 +70,19 @@ ApplicationWindow {
 					contextMenu.visible=!contextMenu.visible
 					contextMenu.x = this.x
 				}
+			}
+
+		}
+	}
+
+	Menu {
+		id:filterMenu
+		visible: false
+		Action{
+			id: filterDone
+			text: "Filter Done"
+			onTriggered: {
+				filter((a) => !a.done)
 			}
 		}
 	}
@@ -214,23 +241,37 @@ ApplicationWindow {
 			}
 		}
 	}
+	ListModel{
+		id: commandModel
+		ListElement{ name: ":show agenda"}
+		ListElement{ name: ":prune"}
+		ListElement{ name: ":find"}
+		ListElement{ name: ":filter done"}
+		ListElement{ name: ":filter none"}
+		ListElement{ name: ":filter overdue"}
+		ListElement{ name: ":filter incomplete"}
+	}
 	Menu{
 		id: suggestions
 		width: rootWindow.width
-		height: suggestionList.height + 30
+		height: suggestionList.height + 50
 		margins: sidebar.visible?300:0
 		y: footer.y - suggestions.height
 		ListView{
 			id: suggestionList
-			model: myModel
+			model:commandModel
 			height: 90
 			delegate: ToolButton{
 				id: suggestionDelegate
 				font.pixelSize: 8
 				font.capitalization: Font.Normal
 				height: 30
-				text: modelData.name
-				onClicked: modelData.toggle()
+				text: name
+				onClicked: {
+					addTask.edited = false
+					addTask.text = model.name
+					suggestions.visible = false
+				}
 			}
 		}
 	}
@@ -244,12 +285,63 @@ ApplicationWindow {
 		border.width: 1
 		TaskAdd {
 			id: addTask
-			onCreateNewTask: myModel.createNewTask(msg)
-			onTextEdited: {
+			onCreateNewTask: {
+				if(msg.startsWith(":")){
+					if(msg.toLowerCase().trim()===(":show agenda")){
+						rootWindow.showAgenda()
+					} else if (msg.startsWith(":prune")){
+						myModel.prune()
+					} else if (msg.startsWith(":toggle")){
+						rootWindow.toggleFocusedTask()
+					} else if(msg.startsWith(":filter")){
+						console.log("filtering")
+						if(msg.match(/\s+done/gi)){
+							console.log("done")
+							filter((a)=>a.done)
+						} else if(msg.match(/\s+incomplete/gi)){
+							filter((a)=>!a.done)
+						} else if(msg.match(/\s+over\s*due/gi)){
+							filter((a)=>a.overDue)
+							console.log("overDue")
+						} else if(msg.match(/\s+none/gi)){
+							unfilter()
+						} else {
+							rootWindow.showNotification("Unrecognised filter string: %1".arg(msg))
+						}
+					}
+					else {
+						rootWindow.showNotification("unrecognised command %1".arg(msg))
+					}
+				}else {
+					myModel.createNewTask(msg)
+				}
+				addTask.text = ""
+			}
+			onSuggestionsRequested: {
 				suggestions.visible=true
 				suggestions.focus=false
+				SortUtils.listModelSort(commandModel, (a,b) =>  - SortUtils.similarity(a.name, text) + SortUtils.similarity(b.name, text))
+				if(text ===commandModel.get(0).name){
+					suggestions.focus=false
+					suggestions.visible=false
+				}
+			}
+			onMostLikelySuggestionRequested: {
+				addTask.text=commandModel.get(0).name
+				suggestions.focus=false
+				suggestions.visible=false
 			}
 		}
+
+	}
+	function filter(fn) {
+		taskList.filterFunction = fn
+		taskList.filtered = true
+	}
+
+	function unfilter() {
+		taskList.filterFunction = ((a) => true)
+		taskList.filtered = false
 	}
 
 	FileDialog {
@@ -262,8 +354,7 @@ ApplicationWindow {
 			console.log(loadTodoListDialog.fileUrl)
 			if (write){
 				writeToFile(loadTodoListDialog.fileUrl)
-			}
-			else{
+			} else{
 				loadFromFile(loadTodoListDialog.fileUrl)
 			}
 		}

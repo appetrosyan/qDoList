@@ -9,6 +9,8 @@ import core 1.0
 ListView {
 	id: listView
 	displayMarginBeginning: 60
+	property var filterFunction: (a) => true
+	property var filtered: false
 	displayMarginEnd: 60
 	add: slideIn
 	remove: dropOut
@@ -47,7 +49,14 @@ ListView {
 	delegate: Component{
 		id: accordion
 		Rectangle{
-			height: childrenRect.height
+			visible: filterFunction(modelData)
+			height: visible?childrenRect.height:0
+			Behavior on height{
+				NumberAnimation{
+					properties: "height"
+					duration: 150
+				}
+			}
 			width: parent.width
 			border.width: 1
 			border.color: Material.background

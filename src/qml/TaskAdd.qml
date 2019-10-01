@@ -10,7 +10,10 @@ import core 1.0
 RowLayout {
 	Layout.alignment: Qt.BottomDockWidgetArea
 	signal createNewTask(string msg)
-	signal textEdited(string text)
+	signal suggestionsRequested(string text)
+	signal mostLikelySuggestionRequested(int x)
+	property alias text: newTask.text
+	property alias edited: newTask.edited
 		TextEdit {
 			id: newTask
 			objectName: "textEditor"
@@ -28,9 +31,9 @@ RowLayout {
 				newTask.text=newTask.focus?"":placeholder
 			}
 			Keys.onReturnPressed: {
-				if(text!="")
-					editingFinished()
-				else{
+				if(text!=""){
+					createNewTask(text)
+				} else{
 					rootWindow.toggleFocusedTask()
 				}
 			}
@@ -44,11 +47,7 @@ RowLayout {
 			}
 			Keys.onTabPressed: {
 				if(!placeholder.visible)
-					rootWindow.demoteFocusedTask()
-			}
-			Keys.onBacktabPressed: {
-				if(!placeholder.visible)
-					rootWindow.promoteFocusedTask()
+					mostLikelySuggestionRequested(0)
 			}
 
 //			Keys.forwardTo: [rootWindow]
@@ -56,18 +55,12 @@ RowLayout {
 			// QML documentation is like Trump's speech. Sometimes you're not sure
 			// that the devs know what words mean.
 			onEditingFinished: {
-				if(newTask.text ===":show agenda"){
-					rootWindow.showAgenda()
-				} else {
-					if(newTask.text != placeholder){
-						createNewTask(newTask.text)
-						newTask.text=""
-					}
-				}
+				newTask.text = placeholder
 			}
 			onTextChanged:{
-				if(newTask.text !=="" && newTask.text!== placeholder && newTask.text.length > 3)
-					textEdited(newTask.text)
+				if(newTask.text !=="" && newTask.text!== placeholder && newTask.text.length > 1 && newTask.text.startsWith(":")){
+					suggestionsRequested(newTask.text)
+				}
 			}
 		}
 
