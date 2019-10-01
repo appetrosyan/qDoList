@@ -36,6 +36,9 @@ public:
 	TaskListModel* taskList;
 	FileListModel* fileList;
 	QQuickSettingInterface* m_settingsInterface;
+	QSystemTrayIcon* m_sysTrayIcon;
+
+	void setSysTrayIcon(QSystemTrayIcon* sysTrayIcon);
 public slots:
 	void populateModel();
 	void handleMessage(QString msg);
@@ -52,4 +55,5 @@ public slots:
 	void demoteCurrentlyFocusedTask();
 	void promoteCurrentlyFocusedTask();
 	void toggleFocusedTask();
+	void showAgenda();
 };

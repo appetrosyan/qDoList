@@ -21,10 +21,11 @@
 
 int main(int argc, char ** argv)
 {
-		QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+	QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QApplication app(argc, argv);
-	QApplication::setWindowIcon(QIcon(":qDo.svg"));
+	QIcon qdo(":qDo.svg");
+	QApplication::setWindowIcon(qdo);
 	QApplication::setOrganizationName("ac.uk.cam.ap886");
 	QApplication::setOrganizationDomain("cam.ac.uk");
 	QApplication::setApplicationName("qDolist");
@@ -64,6 +65,7 @@ int main(int argc, char ** argv)
 	QQuickStyle::setStyle("Material");
 #endif
 	QMLSignalHandler handler(&app);
+	handler.setSysTrayIcon(&tray);
 	QObject::connect(hideAction, &QAction::triggered, handler.window, &QQuickWindow::hide);
 	QObject::connect(showAction, &QAction::triggered, handler.window, &QQuickWindow::show);
 

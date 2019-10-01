@@ -20,7 +20,6 @@ ApplicationWindow {
 	.arg((myFileList.activeTrackedFile!=null)?(myFileList.activeTrackedFile.isModified?"*":""):"")
 	property int mm: Screen.pixelDensity
 	visible: true
-	signal updateDue(int x, string newDue)
 	signal writeToFile(string file)
 	signal loadFromFile(string file)
 	signal saveAllFiles()
@@ -30,6 +29,8 @@ ApplicationWindow {
 	signal demoteFocusedTask()
 	signal promoteFocusedTask()
 	signal toggleFocusedTask()
+	signal showNotification(string msg)
+	signal showAgenda()
 	SystemPalette{
 		id: sysPallete
 	}

@@ -85,6 +85,8 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 	engine.load(url);
 	window = qobject_cast<QQuickWindow *>(engine.rootObjects().value(0));
 	populateModel();
+	connect(window, SIGNAL(showAgenda()), this, SLOT(showAgenda()));
+	connect(window, SIGNAL(showNotification(QString)), this, SLOT(handleMessage(QString)));
 	connect(window, SIGNAL(writeToFile(QString)), this, SLOT(saveModelToFile(QString)));
 	connect(window, SIGNAL(loadFromFile(QString)), this, SLOT(loadModelFromFile(QString)));
 	connect(window, SIGNAL(saveAllFiles()), this, SLOT(syncAllFiles()));
@@ -97,6 +99,10 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 	auto* doc = childObject<QQuickTextDocument*>(engine, "textEditor", "textDocument");
 	auto* parser = new NaturalLanguageHighlighter(doc->textDocument());
 	Q_UNUSED(parser);
+}
+
+void QMLSignalHandler::setSysTrayIcon(QSystemTrayIcon* sysTrayIcon){
+	m_sysTrayIcon=sysTrayIcon;
 }
 
 
@@ -146,12 +152,17 @@ void QMLSignalHandler::toggleFocusedTask()
 
 #undef LASTFOCUSED
 
+void QMLSignalHandler::showAgenda(){
+	QString agenda;
+	for(auto t: *fileList){
+		auto f = qobject_cast<TrackedFile*> (t);
+		agenda+=tr("%1 [%2/%3], ").arg(f->fileName()).arg(f->taskList().incompleteTasks()).arg(f->taskList().totalTasks());
+	}
+	m_sysTrayIcon->showMessage("Agenda", agenda);
+}
 void QMLSignalHandler::handleMessage(QString msg)
 {
-	if(msg.isEmpty())
-		return;
-	fileList->activeTrackedFile()->setModified(true);
-	fileList->activeTrackedFile()->taskList().append(new Task(msg));
+	m_sysTrayIcon->showMessage("QDolist", msg);
 }
 
 void QMLSignalHandler::setActiveTrackedFile(QString fname)

@@ -55,9 +55,13 @@ RowLayout {
 			// QML documentation is like Trump's speech. Sometimes you're not sure
 			// that the devs know what words mean.
 			onEditingFinished: {
-				if(newTask.text != placeholder){
-					createNewTask(newTask.text)
-					newTask.text=""
+				if(newTask.text ===":show agenda"){
+					rootWindow.showAgenda()
+				} else {
+					if(newTask.text != placeholder){
+						createNewTask(newTask.text)
+						newTask.text=""
+					}
 				}
 			}
 		}
