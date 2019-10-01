@@ -10,6 +10,7 @@ import core 1.0
 RowLayout {
 	Layout.alignment: Qt.BottomDockWidgetArea
 	signal createNewTask(string msg)
+	signal textEdited(string text)
 		TextEdit {
 			id: newTask
 			objectName: "textEditor"
@@ -63,6 +64,10 @@ RowLayout {
 						newTask.text=""
 					}
 				}
+			}
+			onTextChanged:{
+				if(newTask.text !=="" && newTask.text!== placeholder && newTask.text.length > 3)
+					textEdited(newTask.text)
 			}
 		}
 

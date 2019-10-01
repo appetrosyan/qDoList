@@ -99,6 +99,14 @@ ApplicationWindow {
 				myModel.prune()
 			}
 		}
+		Action {
+			id: showAgenda
+			shortcut: StandardKey.WhatsThis
+			text: "Show agenda"
+			onTriggered:{
+				rootWindow.showAgenda()
+			}
+		}
 	}
 
 	Component {
@@ -206,6 +214,26 @@ ApplicationWindow {
 			}
 		}
 	}
+	Menu{
+		id: suggestions
+		width: rootWindow.width
+		height: suggestionList.height + 30
+		margins: sidebar.visible?300:0
+		ListView{
+			id: suggestionList
+			model: myModel
+			height: 90
+			delegate: ToolButton{
+				id: suggestionDelegate
+				font.pixelSize: 8
+				font.capitalization: Font.Normal
+				height: 30
+				text: modelData.name
+				onClicked: modelData.toggle()
+			}
+		}
+	}
+
 	footer:Rectangle{
 		color: Material.background
 		width: rootWindow.width
@@ -216,6 +244,10 @@ ApplicationWindow {
 		TaskAdd {
 			id: addTask
 			onCreateNewTask: myModel.createNewTask(msg)
+			onTextEdited: {
+				suggestions.visible=true
+				suggestions.focus=false
+			}
 		}
 	}
 
