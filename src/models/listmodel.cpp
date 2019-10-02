@@ -1,4 +1,4 @@
-#include <QDebug>
+//#include <QDebug>
 
 #include "listmodel.hpp"
 
@@ -26,7 +26,6 @@ QObject *List::take(int i)
  * Removes the element from the model, returning a pointer to the QObject removed.
  * */
 {
-//	qDebug() << QString("%1").arg(i);
 	if ((i > -1) && (i < _data.size())) {
 		beginRemoveRows(QModelIndex(), i, i);
 		QObject * o =_data.takeAt(i);
@@ -35,7 +34,7 @@ QObject *List::take(int i)
 		endRemoveRows();
 		return o;
 	} else {
-		qWarning() << tr("ERROR: take() failed - index %1 out of bounds!").arg(i);
+		qWarning("%s", tr("ERROR: take() failed - index %1 out of bounds!").arg(i).toStdString().c_str());
 		return nullptr;
 	}
 }
@@ -65,14 +64,14 @@ void List::move(int from, int to)
 				_data.move(from, to);
 				endMoveRows();
 			} else {
-				qWarning() << "Something actually went wrong";
+				qWarning("%s", tr("Something actually went wrong").toStdString().c_str());
 			}
 		}
 	} else {
 		if(inBounds(from)){
-			qWarning() << tr("Error: move failed. — to %1 out of bounds").arg(to);
+			qWarning("%s", tr("Error: move failed. — to %1 out of bounds").arg(to).toStdString().c_str());
 		}else {
-			qWarning() << tr("ERROR: move failed. — to %1 out of bounds").arg(from);
+			qWarning("%s", tr("ERROR: move failed. — to %1 out of bounds").arg(from).toStdString().c_str());
 		}
 
 	}
@@ -99,7 +98,7 @@ void List::internalChange(QObject *o)
 	// added to force sort/filter reevaluation
 	int i = _data.indexOf(o);
 	if (i == -1) {
-		qWarning() << "internal change failed, obj not found";
+		qWarning("%s", tr("internal change failed, obj not found").toStdString().c_str());
 		return;
 	}
 	dataChanged(index(i), index(i));

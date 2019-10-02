@@ -1,4 +1,4 @@
-#include <QtCore/QDebug>
+//#include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonArray>
@@ -66,13 +66,13 @@ bool TrackedFile::modified(){return m_modified;}
 
 bool TrackedFile::openIfExists(const QIODevice::OpenMode& flags)
 {
-	if(m_file->exists()){
-		if(m_file->open(flags)){
+	if(Q_LIKELY(m_file->exists())){
+		if(Q_LIKELY(m_file->open(flags))){
 			return true;
 		}else {
 			qWarning("File couldn't be opened");
-			qDebug() << m_file->error();
-			qDebug() << m_url.path();
+			qDebug("%s", QString(m_file->error()).toStdString().c_str());
+			qDebug("%s", m_url.path().toStdString().c_str());
 			return false;
 		}
 	}else {
@@ -101,8 +101,8 @@ void TrackedFile::requestAttention()	{emit wantAttention(this);}
 void TrackedFile::saveToFile(TaskListModel* newTaskList)
 {
 	if(!newTaskList) newTaskList = m_taskList;
-	if(!open(QIODevice::WriteOnly)){
-		qDebug() << m_url.path();
+	if(Q_UNLIKELY(!open(QIODevice::WriteOnly))){
+		qDebug("%s", m_url.path().toStdString().c_str());
 		qWarning("Couldn't open save file.");
 	}else {
 		QJsonArray arr;
@@ -119,7 +119,7 @@ void TrackedFile::saveToFile(TaskListModel* newTaskList)
 
 void TrackedFile::loadFromFile()
 {
-	if(openIfExists(QIODevice::ReadOnly)){
+	if(Q_LIKELY(openIfExists(QIODevice::ReadOnly))){
 		QByteArray saveData = readAll();
 		QJsonDocument loadDoc;
 		if(m_isBinary)
@@ -129,8 +129,8 @@ void TrackedFile::loadFromFile()
 			setBinary(false);
 		}
 		close();
-		if(loadDoc.isEmpty()){
-			qDebug() << "Ignoring empty document";
+		if(Q_UNLIKELY(loadDoc.isEmpty())){
+			qDebug("Ignoring empty document");
 			return;
 		}
 		m_taskList->clear();

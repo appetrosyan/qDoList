@@ -1,4 +1,4 @@
-#include <QDebug>
+//#include <QDebug>
 #include <QRegularExpression>
 
 #include "../task.hpp"
@@ -25,9 +25,9 @@ QObject * TaskListModel::removeTask(Task *t)
 {
 	auto idx= _data.indexOf(qobject_cast<QObject*>(t));
 	if(idx==-1){
-		qWarning() << "Task not found" << t-> text();
+		qWarning("%s", (tr("Task not found") + t-> text()).toStdString().c_str());
 		for(auto& d: _data){
-			qDebug() << d->property("name");
+			qDebug("%s", d->property("name").toString().toStdString().c_str());
 		}
 	}
 	return take(idx);
@@ -89,12 +89,12 @@ void TaskListModel::createNewTask(QString taskName)
 				if(Task::lastFocusedTask==nullptr){
 					Task::lastFocusedTask=UNFUCK(_data.back());
 				}else {
-					qDebug() << Task::lastFocusedTask->text();
+					qDebug("%s", Task::lastFocusedTask->text().toStdString().c_str());
 				}
 				for(int i=0; i<c.captured(1).count('-')-1;++i){
 					if(Task::lastFocusedTask->subModel()->rowCount()!=0){
 						UNFUCK(Task::lastFocusedTask->subModel()->_data.back())->requestFocus();
-						qDebug() << Task::lastFocusedTask->text();
+						qDebug("%s", Task::lastFocusedTask->text().toStdString().c_str());
 					}else {
 						break;
 					}

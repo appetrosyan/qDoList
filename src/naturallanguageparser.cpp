@@ -1,4 +1,4 @@
-#include <QtCore/QDebug>
+//#include <QtCore/QDebug>
 #include <QtCore/QRegularExpression>
 
 #include "task.hpp"
@@ -8,8 +8,8 @@
 
 Task*  TaskLang::captureDueDate(QString& taskName, Task* newTask)
 {
-	if(!newTask) {
-		qWarning() << "Null Pointer passed in";
+	if(Q_UNLIKELY(!newTask)) {
+		qWarning("Null Pointer passed in");
 		return nullptr;
 	}
 	auto d = TaskLang::due.match(taskName);
@@ -23,10 +23,10 @@ Task*  TaskLang::captureDueDate(QString& taskName, Task* newTask)
 
 QDateTime TaskLang::smartDate(const QString& date)
 {
-	qDebug() << date;
+	qDebug("%s", QString(date).toStdString().c_str());
 	QDate out;
 	if(date.contains(QObject::tr("tomorrow"),Qt::CaseInsensitive) || date.contains("завтра")){
-		qDebug() << date + "recognised as tomorrow";
+		qDebug("%s", (date + "recognised as tomorrow").toStdString().c_str());
 		out =  QDate::currentDate().addDays(1);
 	}
 	if(date.contains(QObject::tr("next"), Qt::CaseInsensitive)){
@@ -64,16 +64,13 @@ QDateTime TaskLang::smartDate(const QString& date)
 		for(auto fmt: {"h:mm", "h:mmAP", "h:mmap"}){
 			time = QTime::fromString(match.captured("hhmm"), fmt);
 			if(time.isValid()){
-				qDebug() << "found "<< time;
 				break;
 			}
 		}
-		qDebug() <<time;
 	} else if(!match.captured("phhmm").isEmpty()){
 		for(auto fmt: {"h:mm", "h:mmAP", "h:mmap"}){
 			time = QTime::fromString(match.captured("phhmm"), fmt);
 			if(time.isValid()){
-				qDebug() << "found "<< time;
 				break;
 			}
 		}
@@ -92,8 +89,8 @@ QDateTime TaskLang::smartDate(const QString& date)
 
 Task* TaskLang::captureScheduled(QString& taskName, Task* newTask)
 {
-	if(!newTask) {
-		qWarning() << "Null pointer passed in";
+	if(Q_UNLIKELY(!newTask)) {
+		qWarning("Null pointer passed into captureScheduled");
 		return nullptr;
 	}
 	static auto d = TaskLang::scheduled.match(taskName);
@@ -107,8 +104,8 @@ Task* TaskLang::captureScheduled(QString& taskName, Task* newTask)
 
 Task* TaskLang::captureSubtasks(QString& taskName, Task* task)
 {
-	if(!task) {
-		qWarning() << " nullptr in";
+	if(Q_UNLIKELY(!task)) {
+		qWarning(" nullptr in captureSubtasks");
 		return nullptr;
 	}
 	auto s = TaskLang::subTasks.match(taskName);
@@ -117,7 +114,7 @@ Task* TaskLang::captureSubtasks(QString& taskName, Task* task)
 		auto subs = s.captured(2).split(",");
 		for(const auto& q: subs){
 			if(q.simplified().isEmpty()){
-				qDebug() << "caught empty string";
+				qDebug("caught empty string");
 			}else {
 				task->addSubTask(new Task(q.simplified(), false, QDateTime::currentDateTime(), task->scheduled(), task->due()));
 			}
@@ -129,8 +126,8 @@ Task* TaskLang::captureSubtasks(QString& taskName, Task* task)
 
 Task* TaskLang::captureComment(QString& taskName, Task* task)
 {
-	if(!task) {
-		qWarning() << "nullptr";
+	if(Q_UNLIKELY(!task)) {
+		qWarning("nullptr in captureComment");
 		return nullptr;
 	}
 	auto c = TaskLang::comment.match(taskName);

@@ -1,6 +1,6 @@
 #include "task.hpp"
 
-#include <QDebug>
+//#include <QDebug>
 #include <QThread>
 #include <QJsonObject>
 #include <QJsonArray>
@@ -336,7 +336,7 @@ short weekcmp(const QDateTime& a, const QDateTime& b=QDateTime::currentDateTime(
 
 QString Task::prettyDueDate() const
 {
-	if(!m_due.isValid()){
+	if(Q_UNLIKELY(!m_due.isValid())){
 		return "unscheduled";
 	}
 	if(isWithinWeek(m_due)){
@@ -353,7 +353,7 @@ QString Task::prettyDueDate() const
 }
 
 QString Task::prettyDueTime() const{
-	if(!m_due.isValid()){
+	if(Q_UNLIKELY( !m_due.isValid())){
 		return "";
 	} else{
 		QTime time = m_due.time();

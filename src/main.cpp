@@ -34,7 +34,7 @@ int main(int argc, char ** argv)
 	QIcon::setThemeName("breeze");
 
 	if (QFontDatabase::addApplicationFont(":/fontello.ttf") == -1)
-		qWarning() << "Failed to load fontello.ttf";
+		qWarning("Failed to load fontello.ttf");
 
 	// Starting the system tray.
 	QSystemTrayIcon tray(&app);

@@ -172,6 +172,7 @@ ApplicationWindow {
 			Switch{
 				text: qsTr("Auto Sync Files")
 				checked: settings.autoSync
+				font.pixelSize: 11
 				onCheckedChanged: settings.autoSync = checked
 				transitions: [Transition {
 						NumberAnimation{
@@ -183,6 +184,7 @@ ApplicationWindow {
 			}
 			Switch{
 				text: qsTr("Dark Mode")
+				font.pixelSize: 11
 				checked: settings.darkMode
 				onCheckedChanged: {
 					settings.darkMode = checked
@@ -198,6 +200,7 @@ ApplicationWindow {
 			Switch{
 				text: qsTr("Allow JavaScript evaluation")
 				checked: settings.allowEval
+				font.pixelSize: 11
 				onCheckedChanged: {
 					settings.allowEval = checked
 				}

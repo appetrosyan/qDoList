@@ -46,11 +46,11 @@ void QMLSignalHandler::populateModel()
 	QStringList fileNames;
 	auto size = m_settings->beginReadArray("LastOpenedFiles");
 	if(size==0){
-		qDebug() << "No session files found. Creating a new empty session";
+		qDebug("No session files found. Creating a new empty session");
 	}
 	for(int i=0; i< size; ++i){
 		m_settings->setArrayIndex(i);
-		qDebug() << m_settings->value("fileName").toString();
+		qDebug("%s", m_settings->value("fileName").toString().toStdString().c_str());
 		loadModelFromFile(m_settings->value("fileName").toString());
 	}
 	m_settings->endArray();
@@ -176,7 +176,7 @@ void QMLSignalHandler::setActiveTrackedFile(QString fname)
 
 void QMLSignalHandler::removeAt(int x)
 {
-	qDebug()<<"remove "<<x;
+	qDebug("remove %d",x);
 }
 
 void QMLSignalHandler::saveModelToFile(QString fname)
@@ -217,10 +217,10 @@ void QMLSignalHandler::loadModelFromFile(QString fname)
 void QMLSignalHandler::receiveTask(Task* t)
 {
 	Q_UNUSED(t)
-	qDebug() << "Success! Received";
+	qDebug("Success! Received");
 }
 
 void QMLSignalHandler::printAllTasksToConsole()
 {
-	qDebug() << Task::globalRegister.count();
+	qDebug("%d", Task::globalRegister.count());
 }
