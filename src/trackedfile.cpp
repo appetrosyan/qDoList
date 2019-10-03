@@ -101,7 +101,8 @@ void TrackedFile::requestAttention()	{emit wantAttention(this);}
 void TrackedFile::saveToFile(TaskListModel* newTaskList)
 {
 	if(!newTaskList) newTaskList = m_taskList;
-	if(Q_UNLIKELY(!open(QIODevice::WriteOnly))){
+	m_isWritable = open(QIODevice::WriteOnly);
+	if(Q_UNLIKELY(!m_isWritable)){
 		qDebug("%s", m_url.path().toStdString().c_str());
 		qWarning("Couldn't open save file.");
 	}else {
@@ -119,7 +120,8 @@ void TrackedFile::saveToFile(TaskListModel* newTaskList)
 
 void TrackedFile::loadFromFile()
 {
-	if(Q_LIKELY(openIfExists(QIODevice::ReadOnly))){
+	m_isWritable = openIfExists(QIODevice::ReadOnly);
+	if(Q_LIKELY(m_isWritable)){
 		QByteArray saveData = readAll();
 		QJsonDocument loadDoc;
 		if(m_isBinary)

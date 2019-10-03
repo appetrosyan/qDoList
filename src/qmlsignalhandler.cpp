@@ -8,6 +8,7 @@
 #include <QSystemTrayIcon>
 #include <QQuickTextDocument>
 #include <QQmlFileSelector>
+#include <QtConcurrent>
 
 #include "task.hpp"
 #include "qmlsignalhandler.hpp"
@@ -61,21 +62,15 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 {
 	m_settingsInterface=new QQuickSettingInterface(this);
 	m_settings=new QSettings();
-
 	taskList = new TaskListModel{static_cast<QObject*>(this)};
 	fileList = new FileListModel{static_cast<QObject*>(this)};
+	QMLSignalHandler::populateModel();
 	qmlRegisterType<QSettings>("QSettings", 1,0, "QSettings");
 	engine.rootContext()->setContextProperty("myFileList", fileList);
 	engine.rootContext()->setContextProperty("myModel", taskList);
 	engine.rootContext()->setContextProperty("settings", m_settingsInterface);
 	selector = new QQmlFileSelector(&engine);
-	qInfo() << "Hello world ";
-#ifdef Q_OS_LINUX
 	const QUrl url(QStringLiteral("qrc:/src/qml/main.qml"));
-#endif
-#ifdef Q_OS_MAC
-	const QUrl url(QStringLiteral("qrc:/src/qml/main.qml"));
-#endif
 	auto f = [url](QObject *obj, const QUrl &objUrl)
 	{
 		if (!obj && url == objUrl)
@@ -84,7 +79,6 @@ QMLSignalHandler::QMLSignalHandler(QGuiApplication* app,
 	connect(&engine, &QQmlApplicationEngine::objectCreated, app,f, Qt::QueuedConnection);
 	engine.load(url);
 	window = qobject_cast<QQuickWindow *>(engine.rootObjects().value(0));
-	populateModel();
 	connect(window, SIGNAL(showAgenda()), this, SLOT(showAgenda()));
 	connect(window, SIGNAL(showNotification(QString)), this, SLOT(handleMessage(QString)));
 	connect(window, SIGNAL(writeToFile(QString)), this, SLOT(saveModelToFile(QString)));
@@ -167,7 +161,9 @@ void QMLSignalHandler::handleMessage(QString msg)
 
 void QMLSignalHandler::setActiveTrackedFile(QString fname)
 {
-
+	if(fname.isEmpty()){
+		qDebug("Null fileName");
+	}
 	fileList->addCurrentlyActiveFile(fname);
 	taskList=&fileList->activeTrackedFile()->taskList();
 	resetContext();

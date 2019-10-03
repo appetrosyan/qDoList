@@ -1,210 +1,172 @@
-import QtQuick.Controls 2.0
-import QtQuick 2.0
-import QtQuick.Controls.Material 2.0
-import org.kde.kirigami 2.0 as Kirigami
+import QtQuick 2.11
+import QtQuick.Controls 2.5
+import QtQuick.Layouts 1.12
+import QtQuick.Controls.Material 2.3
 
-SwipeDelegate {
-	property bool expanded: false
-	property var subTasks
-	id: infoRow
-	z: 0
-	height: 40
-	width: parent.width
-	text: "<%1>%2</%1>"
-	.arg(model.modelData.done?"s":"b")
-	.arg(model.modelData.name)
-	focusPolicy: Qt.ClickFocus
-	highlighted: true
-	swipe.left: Rectangle {
-		width: parent.width
-		height: parent.height
-		clip: true
-		color: !model.modelData.done ? "#722" : "#277"
-		Behavior on color {
-			ColorAnimation {
-				easing.type: Easing.InOutCirc
+Row{
+	property bool expanded: true
+	CheckBox{
+		id: doneCheckbox
+		checkState: !modelData.done?
+						(modelData.doneSubtaskCount >0 ? 1:0)
+					  :2
+		checkable: false
+		onClicked: {
+			if(!modelData.toggle()){
+				shake.start()
+			}
+		}
+		SequentialAnimation on x{
+			id: shake
+			NumberAnimation {
+				to: 10
+				duration: 80
+				easing.type: Easing.InOutBounce
+			}
+			NumberAnimation{
+				to: 0
+				duration: 150
+				easing.type: Easing.InOutBounce
+			}
+		}
+		Layout.alignment: Qt.AlignLeft
+
+	}
+	ColumnLayout{
+		id: todoContent
+		width: parent.width - doneCheckbox.width - dueDatePicker.width -7 - (caret.visible?caret.width:0)
+		anchors.verticalCenter: parent.verticalCenter
+		TextEdit{
+			id: nameRow
+			text: modelData.name
+			//		anchors.verticalCenter: parent.verticalCenter
+			color: Material.foreground
+			Layout.alignment: Qt.AlignLeft
+			onCursorVisibleChanged: {
+				modelData.requestFocus()
+			}
+			Keys.onPressed: {
+				if(event.matches(StandardKey.Undo)){
+					text = modelData.name
+				}
+			}
+			Keys.onUpPressed: {
+				rootWindow.moveFocusedTaskUp()
+			}
+			Keys.onDownPressed: {
+				rootWindow.moveFocusedTaskDown()
+			}
+			Keys.onTabPressed: {
+				rootWindow.demoteFocusedTask()
+			}
+			Keys.onBacktabPressed: {
+				rootWindow.promoteFocusedTask()
+			}
+			Keys.onReturnPressed: {
+				text=text.trim()
+				cursorVisible=false
+				editingFinished()
+//				focused=false
+			}
+			onEditingFinished: {
+				modelData.name = text
+			}
+			selectByMouse: true
+		}
+		Row{
+			Label{
+				text: "[%1/%2] ".arg(modelData.doneSubtaskCount).arg(modelData.subtaskCount)
+				visible: modelData.subtaskCount > 0
+				font.pixelSize: nameRow.font.pixelSize-4
+				opacity: 0.70
+			}
+			TextEdit{
+				width: todoContent.width
+				text: (modelData.comment?modelData.comment:"Comment")
+				color: Material.foreground
+				font.pixelSize: nameRow.font.pixelSize-4
+				opacity: modelData.comment?1:0.25
+				onEditingFinished: {
+					if(text !== "Comment" && text.trim() !== "")
+						modelData.comment = text
+					else{
+						text = "Comment"
+						modelData.comment = ""
+					}
+				}
+				Keys.onReturnPressed: {
+					if(event.modifiers === Qt.NoModifier)
+						editingFinished()
+				}
+				Keys.onPressed: {
+					if(event.matches(StandardKey.Undo)){
+						text = modelData.comment
+					}
+				}
+
+				onCursorVisibleChanged: {
+					if(cursorVisible && text ==="Comment"){
+						text = ""
+					}
+				}
+				selectByMouse: true
+				wrapMode: TextEdit.Wrap
+			}
+		}
+	}
+	Label{
+		id: caret
+		text: "\u25B6"
+		rotation: expanded?90:0
+		visible: modelData.subtaskCount
+		anchors.verticalCenter: parent.verticalCenter
+		MouseArea{
+			anchors.fill: parent
+			onClicked: {
+				expanded = !expanded
+			}
+		}
+		Behavior on rotation {
+			NumberAnimation {
+				easing.overshoot: 2.702
+				easing.type: Easing.InBack
+				properties: "rotation"
 				duration: 300
 			}
 		}
-		Label {
-			text: modelData.doneSubtaskCount!==modelData.subtaskCount?
-					  qsTr("Finish subtasks first"):
-					  qsTr("Release to Toggle")
-			anchors.fill: parent
-			anchors.rightMargin: 10
-			horizontalAlignment: Qt.AlignRight
-			verticalAlignment: Qt.AlignVCenter
-			opacity: 2 * infoRow.swipe.position
-			color: "#aaa"
-			Behavior on color {
-				ColorAnimation {
-					easing.type: Easing.InCirc
-				}
-			}
-		}
-		Label {
-			text: !model.modelData.done ? qsTr("To-Do") : qsTr("Done")
-			color: "white"
-			padding: 20
-			anchors.fill: parent
-			horizontalAlignment: Qt.AlignLeft
-			verticalAlignment: Qt.AlignVCenter
-			opacity: !infoRow.swipe.complete
-			Behavior on opacity {
-				NumberAnimation {
-					property: "opacity"
-					easing.type: Easing.InOutQuad
-				}
-			}
-		}
 	}
-	swipe.onCompleted: {
-		if (swipe.position == 1) {
-			model.modelData.toggle()
-			infoRow.swipe.close()
-		}
-	}
-	onClicked: {
-		expanded = !expanded
-		if (model.modelData.hasChildren) {
-			subTasks = model.modelData.subModel
-		} else {
-			subTasks = []
-		}
-		focus = true
-	}
-	swipe.right: Row {
-		id: rightSwipe
-		anchors.right: parent.right
-		height: parent.height
-		Label {
-			id: moveLabel
-			text: qsTr("Edit")
-			color: "white"
-			verticalAlignment: Label.AlignVCenter
-			padding: 12
-			height: parent.height
-			SwipeDelegate.onClicked: {
-				editDialog.visible = true
-				infoRow.swipe.close()
-			}
-			background: Rectangle {
-				color: moveLabel.SwipeDelegate.pressed ? Qt.darker(
-															 "#ffbf47",
-															 1.1) : "#ffbf47"
-			}
-		}
-		Label {
-			text: qsTr("Delete")
-			id: deleteLabel
-			color: "white"
-			verticalAlignment: Label.AlignVCenter
-			padding: 12
-			height: parent.height
-			SwipeDelegate.onClicked:  {
-				model.modelData.goAway()
-				infoRow.swipe.close()
-			}
-			background: Rectangle {
-				color: deleteLabel.SwipeDelegate.pressed ? Qt.darker(
-															   "tomato",
-															   1.1) : "tomato"
-			}
-		}
-
-	}
-
-	Text {
-		id: dueDate
-		anchors.right: parent.right
-		anchors.rightMargin: 25
-		opacity: infoRow.swipe.position == 0 ? 1 : 0
-		Behavior on opacity {
-			NumberAnimation {
-				duration: 310
-			}
-		}
-		color: (model.modelData.overDue ? "red" : "grey")
-		Behavior on color {
-			ColorAnimation {
-				from: "red"
-				to: "grey"
-				duration: 200
-			}
-		}
-		text: model.modelData.due.toLocaleDateString(locale, Locale.ShortFormat)
+	Label{
+		id: dueDatePicker
+		text:  modelData.prettyDueTime
+		font.bold: modelData.overDue?true:false
+		font.capitalization: Font.Capitalize
 		anchors.verticalCenter: parent.verticalCenter
-		visible: (infoRow.text.length * infoRow.font.pointSize * 0.6 < parent.width)
-	}
-
-	Text{
-		id: dragHandle
-		anchors.right: parent.right
-		anchors.rightMargin: 8
-		anchors.verticalCenter: parent.verticalCenter
-		visible: !infoRow.swipe.complete
-		font.family: "Fontello"
-		text:"\ue80e"
-		opacity: infoRow.swipe.position == 0 ? 1 : 0
-		Behavior on opacity {
-			NumberAnimation {
-				easing.type: Easing.InQuad
-				duration: 310
-			}
-		}
-		width: 16
-		height: 16
-		//                    fillMode: Image.TileVertically
-		// Credit <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 		MouseArea{
 			anchors.fill: parent
-			property bool dragEnabled: false
-			property int startX: 0
-			property int startY: 0
-			drag{
-				target: infoRow
-				axis: Drag.XAndYAxis
-				maximumX: 50
-				minimumX: -50
-				maximumY: infoRow.height
-				minimumY: -infoRow.height
-			}
-			onPressed:   {
-				startX = infoRow.x
-				startY = infoRow.y
-				infoRow.z =200
-				infoRow.opacity = 0.5
-			}
-			onReleased: {
-				infoRow.z=0
-				if(infoRow.y - startY > 10){
-					infoRow.y = startY
-					model.modelData.moveDown()
-				}else if (infoRow.y - startY < -10) {
-					model.modelData.moveUp()
-					infoRow.y = startY
-				} else {
-					infoRow.y = startY
+			onClicked: loader_pickerDialog.item.visible=!loader_pickerDialog.item.visible
+		}
+		// TODO: CREATE FUCKING REFACTORING TOOLS. IF YOU CAN WRITE COMMENTS THAT TELL ME WHAT TO DO
+		// THEN YOU CAN WRITE AN AWK SCRIPT.
+		Component {
+			id: component_pickerDialog
+			Popup{
+				property alias picker: inner_picker
+				id: pickerDialog
+				height: picker.height +20
+				width: picker.width +20
+				rightMargin: 5
+				DatePicker {
+					id: inner_picker
+					date: modelData.due
+					onNewDate: {
+						modelData.due = msg
+					}
 				}
-				if(infoRow.x - startX > 20){
-					infoRow.x = startX
-					model.modelData.demote()
-				}else if(infoRow.x - startX < -10){
-					infoRow.x = startX
-					model.modelData.promote()
-				} else {
-					infoRow.x = startX
-				}
-				infoRow.opacity = 1
-				infoRow.z=0
 			}
 		}
+		Loader {
+			id: loader_pickerDialog
+			sourceComponent: component_pickerDialog
+		}
 	}
-	ToolTip {
-		text: model.modelData.scheduled
-		delay: 1000
-		visible: infoRow.pressed
-	}
-
-
 }

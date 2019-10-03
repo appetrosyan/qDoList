@@ -4,6 +4,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Dialogs 1.2
+import Qt.labs.platform 1.0 as Labs
 import QSettings 1.0
 import ac.uk.cam.ap886 1.0
 import core 1.0
@@ -44,6 +45,7 @@ ApplicationWindow {
 		RowLayout{
 			anchors.fill: parent
 			ToolButton{
+				id: sidebarToggle
 				text: "\u2263"
 				visible: rootWindow.width < 500
 				font.pixelSize: 24
@@ -127,8 +129,7 @@ ApplicationWindow {
 			shortcut: StandardKey.SaveAs
 			text: "Save as"
 			onTriggered: {
-				loadTodoListDialog.write=true
-				loadTodoListDialog.visible=true
+				saveTodoListDialog.visible=true
 			}
 			icon.name: "file-save-as"
 		}
@@ -219,6 +220,7 @@ ApplicationWindow {
 	Drawer{
 		id: globalDrawer
 		height: rootWindow.height
+		dragMargin: sidebarToggle.visible?10:0
 		width: 250
 		// TODO: Move position bindings from the component to the Loader.
 		//       Check all uses of 'parent' inside the root element of the component.
@@ -292,6 +294,7 @@ ApplicationWindow {
 			id: suggestionList
 			model:commandModel
 			height: 90
+			clip: true
 			delegate: ToolButton{
 				id: suggestionDelegate
 				font.pixelSize: 8
@@ -301,7 +304,7 @@ ApplicationWindow {
 				onClicked: {
 					addTask.edited = false
 					addTask.text = model.name
-					suggestions.visible = false
+					visible = false
 				}
 			}
 		}
@@ -384,19 +387,19 @@ ApplicationWindow {
 		taskList.filtered = false
 	}
 
+	FileDialog{
+		id:saveTodoListDialog
+		title: qsTr("Choose a new To-do list to write")
+		folder: shortcuts.documents
+		selectExisting: false
+		onAccepted: rootWindow.writeToFile(fileUrl)
+	}
+
 	FileDialog {
 		id: loadTodoListDialog
-		title: qsTr("Choose a local To-Do list file %1")
-		.arg(write?qsTr("to write"):qsTr("to read"))
-		folder: shortcuts.home
-		property bool write: false
-		onAccepted: {
-			console.log(loadTodoListDialog.fileUrl)
-			if (write){
-				writeToFile(loadTodoListDialog.fileUrl)
-			} else{
-				loadFromFile(loadTodoListDialog.fileUrl)
-			}
-		}
+		title: qsTr("Choose an exsiting To-do list")
+		folder: shortcuts.documents
+		selectExisting: true
+		onAccepted: rootWindow.loadFromFile(fileUrl)
 	}
 }

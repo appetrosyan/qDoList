@@ -8,6 +8,7 @@ Item {
 		id: fileList
 		anchors.fill: parent
 		model: myFileList
+		clip: true
 		delegate : Component{
 				RowLayout{
 					width: fileList.width

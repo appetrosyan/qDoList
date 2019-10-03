@@ -23,7 +23,13 @@ TrackedFile* FileListModel::activeTrackedFile()
 
 QStringList FileListModel::fileNames()
 {
-	return m_files.keys();
+	QStringList qlst;
+	for(QString str: m_files.keys()){
+		if(!str.isEmpty() && str!="" && m_files[str]->m_isWritable){
+			qlst.append(str);
+		}
+	}
+	return qlst;
 }
 
 int FileListModel::activeTrackedFileIndex()

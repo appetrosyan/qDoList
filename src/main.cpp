@@ -21,7 +21,7 @@
 
 int main(int argc, char ** argv)
 {
-	QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+	QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QApplication app(argc, argv);
 	QIcon qdo(":qDo.svg");
@@ -45,15 +45,15 @@ int main(int argc, char ** argv)
 	// Actions
 	QMenu contextMenu;
 
-	QAction* showAction = new QAction(QObject::tr("&Show"));
-	QAction* hideAction = new QAction(QObject::tr("&Minimize to tray"));
-	QAction* quitAction = new QAction(QObject::tr("&Quit"));
-	QObject::connect(quitAction, &QAction::triggered, &app, &QApplication::quit);
+	QAction showAction(QObject::tr("&Show"));
+	QAction hideAction(QObject::tr("&Minimize to tray"));
+	QAction quitAction(QObject::tr("&Quit"));
+	QObject::connect(&quitAction, &QAction::triggered, &app, &QApplication::quit);
 
-	contextMenu.addAction(hideAction);
-	contextMenu.addAction(showAction);
+	contextMenu.addAction(&hideAction);
+	contextMenu.addAction(&showAction);
 	contextMenu.addSeparator();
-	contextMenu.addAction(quitAction);
+	contextMenu.addAction(&quitAction);
 
 	tray.setContextMenu(&contextMenu);
 
@@ -66,8 +66,8 @@ int main(int argc, char ** argv)
 #endif
 	QMLSignalHandler handler(&app);
 	handler.setSysTrayIcon(&tray);
-	QObject::connect(hideAction, &QAction::triggered, handler.window, &QQuickWindow::hide);
-	QObject::connect(showAction, &QAction::triggered, handler.window, &QQuickWindow::show);
+	QObject::connect(&hideAction, &QAction::triggered, handler.window, &QQuickWindow::hide);
+	QObject::connect(&showAction, &QAction::triggered, handler.window, &QQuickWindow::show);
 
 	return QApplication::exec();
 }

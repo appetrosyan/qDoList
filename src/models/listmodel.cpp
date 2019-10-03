@@ -97,7 +97,7 @@ void List::internalChange(QObject *o)
 {
 	// added to force sort/filter reevaluation
 	int i = _data.indexOf(o);
-	if (i == -1) {
+	if (Q_UNLIKELY(i == -1)) {
 		qWarning("%s", tr("internal change failed, obj not found").toStdString().c_str());
 		return;
 	}
