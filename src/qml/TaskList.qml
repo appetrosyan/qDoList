@@ -46,45 +46,57 @@ ListView {
 			easing.type: Easing.InOutCirc
 		}
 	}
+//	interactive: accordion.dragHandle.held
 	delegate: Component{
 		id: accordion
 		Rectangle{
-			MouseArea{
-				anchors.fill: parent
-				cursorShape: Qt.OpenHandCursor
-				property bool held: false
-				property int startx:0
-				property int starty: 0
-				onPressed: {
-					held = true
-					startx = mouseX
-					starty = mouseY
-				}
-				onReleased: {
-					held = false
-				}
-				onHeldChanged: {
-					cursorShape = (held?Qt.ClosedHandCursor:Qt.OpenHandCursor)
-				}
-				onExited: {
-					held = false
-				}
-				onPositionChanged:{
-					if(mouseY - 10 >starty && held){
-						modelData.moveDown()
+			Rectangle{
+				id: dragHandle
+				width: 30
+				height: 30
+				anchors.horizontalCenter: parent.horizontalCenter
+				anchors.top: parent.top
+				property alias held: dragHandler.held
+				MouseArea{
+					id: dragHandler
+					anchors.fill: parent
+					cursorShape: Qt.OpenHandCursor
+					property bool held: false
+					property int startx:0
+					property int starty: 0
+					onPressed:  {
+						held = true
+						startx = mouseX
+						starty = mouseY
+					}
+					onReleased: {
 						held = false
-					}else if (mouseY + 10 < starty && held){
-						modelData.moveUp()
+					}
+					onHeldChanged: {
+						cursorShape = (held?Qt.ClosedHandCursor:Qt.OpenHandCursor)
+					}
+					onExited: {
 						held = false
-					} else if (mouseX - 10 > startx){
-						modelData.demote()
-						held = false
-					} else if (mouseX +10 < startx){
-						modelData.promote()
-						held=false
+					}
+					onPositionChanged:{
+						if(mouseY - 10 >starty && held){
+							modelData.moveDown()
+							held = false
+						}else if (mouseY + 10 < starty && held){
+							modelData.moveUp()
+							held = false
+						} else if (mouseX - 10 > startx){
+							modelData.demote()
+							held = false
+						} else if (mouseX +10 < startx){
+							modelData.promote()
+							held=false
+						}
 					}
 				}
+
 			}
+
 
 			visible: filterFunction(modelData)
 			height: visible?childrenRect.height:0

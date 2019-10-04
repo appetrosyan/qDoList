@@ -228,6 +228,7 @@ ApplicationWindow {
 			id: loader_ColumnLayout
 			sourceComponent: sidebar
 		}
+
 	}
 
 	Timer{
@@ -238,6 +239,7 @@ ApplicationWindow {
 		onTriggered: {
 			saveAllFiles()
 		}
+
 	}
 
 	ColumnLayout {
@@ -248,8 +250,8 @@ ApplicationWindow {
 			Layout.fillWidth: true
 			Rectangle{
 				id: drawerReplacer
-
 			}
+
 			Loader{
 				sourceComponent: sidebar
 				visible: rootWindow.width> 500
@@ -272,8 +274,10 @@ ApplicationWindow {
 					model: myModel
 				}
 			}
+
 		}
 	}
+
 	ListModel{
 		id: commandModel
 		ListElement{ name: ":show agenda"}
@@ -284,6 +288,7 @@ ApplicationWindow {
 		ListElement{ name: ":filter overdue"}
 		ListElement{ name: ":filter incomplete"}
 	}
+
 	Menu{
 		id: suggestions
 		width: rootWindow.width
@@ -310,73 +315,70 @@ ApplicationWindow {
 		}
 	}
 
-	footer:Rectangle{
-		color: Material.background
-		width: rootWindow.width
-		height: addTask.height
-		radius: 5
-		border.color: Qt.tint(sysPallete.base, sysPallete.highlight)
-		border.width: 1
-		TaskAdd {
-			id: addTask
-			onCreateNewTask: {
-				if(msg.startsWith(":")){
-					if(msg.toLowerCase().trim()===(":show agenda")){
-						rootWindow.showAgenda()
-					} else if (msg.startsWith(":prune")){
-						myModel.prune()
-					} else if (msg.startsWith(":toggle")){
-						rootWindow.toggleFocusedTask()
-					} else if(msg.startsWith(":filter")){
-						console.log("filtering")
-						if(msg.match(/\s+done/gi)){
-							console.log("done")
-							filter((a)=>a.done)
-						} else if(msg.match(/\s+incomplete/gi)){
-							filter((a)=>!a.done)
-						} else if(msg.match(/\s+over\s*due/gi)){
-							filter((a)=>a.overDue)
-							console.log("overDue")
-						} else if(msg.match(/\s+none/gi)){
-							unfilter()
-						} else if (msg.match(/\s+custom/gi)) {
-							let tag = msg.match(/custom\s+(.*)/i)
-							if(settings.allowEval){
-								// @disable-check M23
-								filter(eval(tag[1]))
-							} else {
-								rootWindow.showNotification("JavaScript eval disabled. Custom filters will not work.")
-							}
+	footer:TaskAdd {
+		id: addTask
+		onCreateNewTask: {
+			if(msg.startsWith(":")){
+				if(msg.toLowerCase().trim()===(":show agenda")){
+					rootWindow.showAgenda()
+				} else if (msg.startsWith(":prune")){
+					myModel.prune()
+				} else if (msg.startsWith(":toggle")){
+					rootWindow.toggleFocusedTask()
+				} else if(msg.startsWith(":filter")){
+					console.log("filtering")
+					if(msg.match(/\s+done/gi)){
+						console.log("done")
+						filter((a)=>a.done)
+					} else if(msg.match(/\s+incomplete/gi)){
+						filter((a)=>!a.done)
+					} else if(msg.match(/\s+over\s*due/gi)){
+						filter((a)=>a.overDue)
+						console.log("overDue")
+					} else if(msg.match(/\s+none/gi)){
+						unfilter()
+					} else if (msg.match(/\s+custom/gi)) {
+						let tag = msg.match(/custom\s+(.*)/i)
+						if(settings.allowEval){
+							// Yeah, I know eval is dangerous. Using JavaScript is not my choice, I can at least
+							// make the best of it.
+							// @disable-check M23
+							filter(eval(tag[1]))
 						} else {
-							rootWindow.showNotification("Unrecognised filter string: %1".arg(msg))
+							rootWindow.showNotification("JavaScript eval disabled. Custom filters will not work.")
 						}
+					} else {
+						rootWindow.showNotification("Unrecognised filter string: %1".arg(msg))
 					}
-					else {
-						rootWindow.showNotification("unrecognised command %1".arg(msg))
-					}
-				}else {
-					myModel.createNewTask(msg)
 				}
-				addTask.text = ""
-				suggestions.visible=false
-			}
-			onSuggestionsRequested: {
-				suggestions.visible=true
-				suggestions.focus=false
-				SortUtils.listModelSort(commandModel, (a,b) =>  - SortUtils.similarity(a.name, text) + SortUtils.similarity(b.name, text))
-				if(text ===commandModel.get(0).name){
-					suggestions.focus=false
-					suggestions.visible=false
+				else {
+					rootWindow.showNotification("unrecognised command %1".arg(msg))
 				}
+			}else {
+				myModel.createNewTask(msg)
 			}
-			onMostLikelySuggestionRequested: {
-				addTask.text=commandModel.get(0).name
+			addTask.text = ""
+			suggestions.visible=false
+		}
+		onSuggestionsRequested: {
+			suggestions.visible=true
+			suggestions.focus=false
+			SortUtils.listModelSort(commandModel,
+									(a,b) =>  - SortUtils.similarity(a.name, text) +
+									SortUtils.similarity(b.name, text))
+			if(text ===commandModel.get(0).name){
 				suggestions.focus=false
 				suggestions.visible=false
 			}
 		}
-
+		onMostLikelySuggestionRequested: {
+			addTask.text=commandModel.get(0).name
+			suggestions.focus=false
+			suggestions.visible=false
+		}
 	}
+
+
 	function filter(fn) {
 		taskList.filterFunction = fn
 		taskList.filtered = true
