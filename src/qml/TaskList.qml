@@ -50,12 +50,25 @@ ListView {
 	delegate: Component{
 		id: accordion
 		Rectangle{
+			id: containerRect
+			visible: filterFunction(modelData)
+			height: visible?childrenRect.height:0
+			Behavior on height{
+				NumberAnimation{
+					properties: "height"
+					duration: 150
+				}
+			}
+			width: parent.width
+			border.width: 1
+			border.color: Material.background
+			color: Qt.darker(Material.background, 1+0.01*modelData.subtaskCount)
 			Rectangle{
 				id: dragHandle
 				width: 30
-				height: 30
-				anchors.horizontalCenter: parent.horizontalCenter
-				anchors.top: parent.top
+				radius: 20
+				height: parent.height
+				anchors.verticalCenter:  parent.verticalCenter
 				property alias held: dragHandler.held
 				MouseArea{
 					id: dragHandler
@@ -77,6 +90,7 @@ ListView {
 					}
 					onExited: {
 						held = false
+						subView.height = Qt.binding(() => subView.childrenRect.height)
 					}
 					onPositionChanged:{
 						if(mouseY - 10 >starty && held){
@@ -89,33 +103,22 @@ ListView {
 							modelData.demote()
 							held = false
 						} else if (mouseX +10 < startx){
+							height = 0
 							modelData.promote()
 							held=false
 						}
 					}
 				}
-
 			}
 
-
-			visible: filterFunction(modelData)
-			height: visible?childrenRect.height:0
-			Behavior on height{
-				NumberAnimation{
-					properties: "height"
-					duration: 150
-				}
-			}
-			width: parent.width
-			border.width: 1
-			border.color: Material.background
-			color: Qt.darker(Material.background, 1+0.01*modelData.subtaskCount)
-			radius: 5
 			InfoRow{
 				id:infoRow
-				width: parent.width
+				anchors.left: parent.left
+				anchors.leftMargin: dragHandle.width
+				anchors.right: parent.right
 			}
 			ListView{
+				id: subView
 				x: 10
 				visible: infoRow.expanded
 				height: visible?childrenRect.height:0

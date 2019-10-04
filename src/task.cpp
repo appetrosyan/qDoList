@@ -111,13 +111,15 @@ void Task::demote()
 	}
 }
 
+// Sadly this function always bugs. Mainly because of QML.
 void Task::promote()
 {
 	if(m_superTask){
 		m_superModel->removeTask(this);
 		disconnect(this, &Task::doneChanged, m_superTask, &Task::childToggled);
-		m_superTask->m_superModel->insert(this, m_superTask->m_superModel->indexOf(m_superTask));
+		m_superTask->m_superModel->insert(this, m_superTask->m_superModel->indexOf(m_superTask)+1);
 		emit m_superTask->childrenChanged();
+		emit m_superTask->subModel()->sizeChanged();
 		setSuperModel(m_superTask->m_superModel);
 		m_superTask=m_superTask->m_superTask;
 		if(m_superTask){
