@@ -8,11 +8,12 @@ import ac.uk.cam.ap886 1.0
 import core 1.0
 
 RowLayout {
+	id: taskAdd
 	Layout.alignment: Qt.BottomDockWidgetArea
 	signal createNewTask(string msg)
 	signal suggestionsRequested(string text)
 	signal mostLikelySuggestionRequested(int x)
-	property string text: newTask.text==newTask.placeholder?"":newTask.text
+	property string text: ""
 	property alias edited: newTask.edited
 	TextEdit {
 		id: newTask
@@ -29,15 +30,11 @@ RowLayout {
 		Layout.rightMargin: 7
 		padding: 14
 		onFocusChanged: {
-			if(focus===true)
+			if(newTask.focus===true)
 				newTask.text=newTask.focus?"":placeholder
 		}
 		Keys.onReturnPressed: {
-			if(text!=""){
-				createNewTask(text)
-			} else{
-				rootWindow.toggleFocusedTask()
-			}
+			createNewTask(taskAdd.text)
 		}
 		Keys.onUpPressed: {
 			if(!placeholder.visible)
@@ -60,9 +57,18 @@ RowLayout {
 			newTask.text = placeholder
 		}
 		onTextChanged:{
-			if(newTask.text !=="" && newTask.text!== placeholder && newTask.text.length > 1 && newTask.text.startsWith(":")){
-				suggestionsRequested(newTask.text)
+			if(newTask.text !=="" && newTask.text!== placeholder  ){
+				if(newTask.text.startsWith(":") && newTask.text.length > 1){
+					suggestionsRequested(newTask.text)
+				}
+				taskAdd.text = newTask.text
 			}
 		}
+	}
+	ToolButton{
+		id: submitButton
+		text: "±"
+		Layout.alignment: Qt.AlignRight
+		onClicked: createNewTask(taskAdd.text)
 	}
 }

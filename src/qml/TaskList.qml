@@ -49,6 +49,43 @@ ListView {
 	delegate: Component{
 		id: accordion
 		Rectangle{
+			MouseArea{
+				anchors.fill: parent
+				cursorShape: Qt.OpenHandCursor
+				property bool held: false
+				property int startx:0
+				property int starty: 0
+				onPressed: {
+					held = true
+					startx = mouseX
+					starty = mouseY
+				}
+				onReleased: {
+					held = false
+				}
+				onHeldChanged: {
+					cursorShape = (held?Qt.ClosedHandCursor:Qt.OpenHandCursor)
+				}
+				onExited: {
+					held = false
+				}
+				onPositionChanged:{
+					if(mouseY - 10 >starty && held){
+						modelData.moveDown()
+						held = false
+					}else if (mouseY + 10 < starty && held){
+						modelData.moveUp()
+						held = false
+					} else if (mouseX - 10 > startx){
+						modelData.demote()
+						held = false
+					} else if (mouseX +10 < startx){
+						modelData.promote()
+						held=false
+					}
+				}
+			}
+
 			visible: filterFunction(modelData)
 			height: visible?childrenRect.height:0
 			Behavior on height{
