@@ -7,7 +7,6 @@ The code quality leaves much to be desired, and most of what I did has a hacky f
 
 It's a todo list manager. When it's in a finished (post-alpha) state, I expect it to be the same thing to Todoist, as KeepassX is to LastPass.
 * List of Features
- - [ ]  tasks that can be toggled by swiping left to right. (this used to be a feature, but then I discovered that 
  - [X] Tasks can be moved
    - [X] up and down within the same model
    - [X] promoted and de-moted across models
@@ -44,7 +43,7 @@ It's a todo list manager. When it's in a finished (post-alpha) state, I expect i
      - [X] In English
      - [-] In Russian (the translations are there but don't load)
    - [X] Additional subtasks can be added by putting them inside curly braces and splitting with commas.
-   - [X] Same can be done by putting comma separated subtasks after a 
+   - [X] Same can be done by putting comma separated subtasks after a colon. 
    - [X] a "+" asks the manager to find the closest match from all open tasks.
      - [X] if there's a unique match at the top level the task is marked. 
  - [X] The recently opened files are saved persistently across sessions
@@ -72,9 +71,6 @@ The PKGBUILD is provided in the repository, so
 makepkg -si
 #+end_src
 
-*** Known non-feature. 
-
-I still haven't designed an icon, and the .desktop file simply doesn't exist. I'm working on it. 
 *** AUR 
 Install using an AUR helper of your choosing (yay, aura etc.)
 
@@ -84,13 +80,32 @@ e.g.
 yay -S qdolist
 #+end_src
 
+or
+
+#+begin_src bash
+pacaur -S qdolist
+#+end_src
+
+*** Known non-feature. 
+
+I still haven't designed an icon, and the .desktop file simply doesn't exist. I'm working on it. 
+
+
 ** On Mac OS X. 
 
-As of now, Mac OS X is not supported. Partly because I'm stupid and I can't figure out how to build Kirigami on Mac OS X (which also kind of means that I should be using it staticlally linked, which I can't really do either). An earlier build (which used pure QML), is still available, but you'd have to do some Git Trickery to get at it. 
+It builds and runs on OS X. In fact, after the recent update there's no disadvantage in building on any platform. If Qt supports it, then the program runs on it. 
 
-** On Windows. 
+** Android
 
-Should be possible to build, but you're on your own with that. 
+Builds and runs, but has some functional deficiencies. I'm workin on it. 
+
+** IOS
+
+Builds runs and no functional deficiencies. It misses an icon, and the file selection dialog is ... unsightly. There's also the lock-in issue. Currently, the only way of installing on IOS is through an apple developer account: I haven't published it on the App Store. 
+
+** Windows
+
+Works as intended. Still looks like a smartphone app. 
 
 
 * License. 
